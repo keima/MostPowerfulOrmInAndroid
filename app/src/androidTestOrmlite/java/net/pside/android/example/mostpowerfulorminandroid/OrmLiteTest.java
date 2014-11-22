@@ -15,7 +15,7 @@ import java.util.Date;
 /**
  * Created by keima on 14/11/21.
  */
-public class OrmLiteTest extends AndroidTestCase {
+public class OrmLiteTest extends AndroidTestCase implements IOrmTestCase {
     public static final String TAG = OrmLiteTest.class.getSimpleName();
 
     public static final int NUMBER_OF_INSERT_SINGLE = 10000;
@@ -35,14 +35,13 @@ public class OrmLiteTest extends AndroidTestCase {
 
     @Override
     protected void tearDown() throws Exception {
-        super.tearDown();
         Thread.sleep(2000);
+        super.tearDown();
     }
 
-    public void testSingleInsert() throws SQLException {
+    public void testSingleInsert() {
 
         TimingLogger logger = new TimingLogger(TAG, "SingleInsert on ORMLite");
-
 
         for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
             Simple simple = new Simple();
@@ -55,7 +54,12 @@ public class OrmLiteTest extends AndroidTestCase {
             simple.floatValue = i;
             simple.doubleValue = i;
 
-            mSimpleDao.create(simple);
+            try {
+                mSimpleDao.create(simple);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                fail();
+            }
         }
 
         logger.addSplit("Insert " + NUMBER_OF_INSERT_SINGLE + " records.");
@@ -63,8 +67,12 @@ public class OrmLiteTest extends AndroidTestCase {
 
     }
 
+    public void testComplexInsert() {
 
-    private void resetDatabaseIfNeeded(){
+    }
+
+
+    private void resetDatabaseIfNeeded() {
         File databasePath = mContext.getDatabasePath(MySQLiteOpenHelper.DATABASE_NAME);
         if (databasePath != null && databasePath.exists()) {
             mContext.deleteDatabase(MySQLiteOpenHelper.DATABASE_NAME);
