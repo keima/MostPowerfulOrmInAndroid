@@ -18,8 +18,6 @@ import java.util.Date;
 public class OrmLiteTest extends AndroidTestCase implements IOrmTestCase {
     public static final String TAG = OrmLiteTest.class.getSimpleName();
 
-    public static final int NUMBER_OF_INSERT_SINGLE = 10000;
-
     private Dao<Simple, Long> mSimpleDao;
 
     @Override
@@ -43,7 +41,7 @@ public class OrmLiteTest extends AndroidTestCase implements IOrmTestCase {
 
         TimingLogger logger = new TimingLogger(TAG, "SingleInsert on ORMLite");
 
-        for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
+        for (int i = 1; i <= IOrmTestCase.NUMBER_OF_INSERT_SINGLE; i++) {
             Simple simple = new Simple();
             simple.stringValue = "TestData" + i;
             simple.dateValue = new Date(i * 1000);
@@ -62,7 +60,7 @@ public class OrmLiteTest extends AndroidTestCase implements IOrmTestCase {
             }
         }
 
-        logger.addSplit("Insert " + NUMBER_OF_INSERT_SINGLE + " records.");
+        logger.addSplit("Insert " + IOrmTestCase.NUMBER_OF_INSERT_SINGLE + " records.");
         logger.dumpToLog();
 
     }
