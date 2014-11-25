@@ -36,4 +36,7 @@ public class Simple extends Model {
     @Column
     public double doubleValue;
 
+    public Simple() {
+        super();
+    }
 }

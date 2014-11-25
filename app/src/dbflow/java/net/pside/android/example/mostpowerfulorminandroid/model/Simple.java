@@ -1,5 +1,7 @@
 package net.pside.android.example.mostpowerfulorminandroid.model;
 
+import android.provider.BaseColumns;
+
 import com.google.common.primitives.Bytes;
 import com.grosner.dbflow.annotation.Column;
 import com.grosner.dbflow.annotation.Table;
@@ -12,7 +14,7 @@ import java.util.Date;
  */
 @Table
 public class Simple extends BaseModel {
-    @Column(columnType = Column.PRIMARY_KEY_AUTO_INCREMENT)
+    @Column(columnType = Column.PRIMARY_KEY_AUTO_INCREMENT, name = BaseColumns._ID)
     long id;
 
     @Column

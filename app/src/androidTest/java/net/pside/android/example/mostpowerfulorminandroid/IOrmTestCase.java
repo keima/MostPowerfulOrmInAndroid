@@ -7,5 +7,6 @@ public interface IOrmTestCase {
     public static final int NUMBER_OF_INSERT_SINGLE = 10000;
 
     public void testSingleInsert();
-    public void testComplexInsert();
+    public void testSingleBulkInsert();
+
 }
