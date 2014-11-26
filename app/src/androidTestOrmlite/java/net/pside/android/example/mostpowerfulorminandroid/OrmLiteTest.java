@@ -2,7 +2,8 @@ package net.pside.android.example.mostpowerfulorminandroid;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.misc.TransactionManager;
-import com.j256.ormlite.stmt.mapped.MappedPreparedStmt;
+import com.j256.ormlite.stmt.PreparedQuery;
+import com.j256.ormlite.stmt.QueryBuilder;
 
 import net.pside.android.example.mostpowerfulorminandroid.helper.MySQLiteOpenHelper;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
@@ -49,9 +50,7 @@ public class OrmLiteTest extends OrmTestCase {
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG,
-                "SingleInsert on ORMLite (BulkMode:" + (isBulkMode ? "ON" : "OFF") + ")"
-        );
+        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(isBulkMode));
 
         if (isBulkMode) {
             try {
@@ -79,7 +78,22 @@ public class OrmLiteTest extends OrmTestCase {
             }
         }
 
-        logger.addSplit("Insert " + IOrmTestCase.NUMBER_OF_INSERT_SINGLE + " records.");
+        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+
+        try {
+            QueryBuilder<Simple, Long> builder = mSimpleDao.queryBuilder();
+            PreparedQuery<Simple> preparedQuery = builder.where()
+                    .eq("booleanValue", true)
+                    .prepare();
+
+            List<Simple> simpleList = mSimpleDao.query(preparedQuery);
+            assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simpleList.size());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
         logger.dumpToLog();
     }
 

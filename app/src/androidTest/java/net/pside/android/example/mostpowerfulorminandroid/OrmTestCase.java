@@ -13,6 +13,18 @@ public abstract class OrmTestCase extends AndroidTestCase implements IOrmTestCas
 
     protected abstract String getDatabaseName();
 
+    public static String MSG_LOGGER_INITIALIZE(boolean isBulkMode) {
+        return "Insert on " + BuildConfig.FLAVOR.toUpperCase() +
+                " (BulkMode:" + (isBulkMode ? "ON" : "OFF") + ")";
+    }
+
+    public static final String MSG_LOGGER_SPLIT_INSERT =
+            "Insert " + NUMBER_OF_INSERT_SINGLE + " records.";
+
+    public static final String MSG_LOGGER_SPLIT_SELECT =
+            "Select Records.";
+
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -45,7 +57,7 @@ public abstract class OrmTestCase extends AndroidTestCase implements IOrmTestCas
         if (databasePath != null && databasePath.exists()) {
             File renameTo = new File(databasePath.getAbsolutePath() + "-" + new Date().getTime());
             boolean result = databasePath.renameTo(renameTo);
-            Log.d("OrmTestCase", (result ? "Deleted:" : "FAILED:") + databasePath.toString() + " -> " + renameTo.toString());
+            Log.d("OrmTestCase", (result ? "Moved:" : "FAILED:") + databasePath.toString() + " -> " + renameTo.toString());
         }
     }
 

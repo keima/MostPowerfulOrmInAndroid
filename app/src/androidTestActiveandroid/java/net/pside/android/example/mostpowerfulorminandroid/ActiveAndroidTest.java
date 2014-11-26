@@ -4,11 +4,14 @@ import android.support.annotation.NonNull;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
+import com.activeandroid.Model;
+import com.activeandroid.query.Select;
 
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
 import net.pside.android.example.mostpowerfulorminandroid.util.TimingLogger;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by keima on 14/11/22.
@@ -48,9 +51,7 @@ public class ActiveAndroidTest extends OrmTestCase {
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG,
-                "SingleInsert on ActiveAndroid (BulkMode:" + (isBulkMode ? "ON" : "OFF") + ")"
-        );
+        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(isBulkMode));
 
         if (isBulkMode) {
             ActiveAndroid.beginTransaction();
@@ -75,7 +76,14 @@ public class ActiveAndroidTest extends OrmTestCase {
             ActiveAndroid.endTransaction();
         }
 
-        logger.addSplit("Insert " + IOrmTestCase.NUMBER_OF_INSERT_SINGLE + " records.");
+        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+
+        List<Simple> simpleList = new Select().from(Simple.class)
+                .where("booleanValue = ?", true)
+                .execute();
+        assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simpleList.size());
+
+        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
         logger.dumpToLog();
     }
 

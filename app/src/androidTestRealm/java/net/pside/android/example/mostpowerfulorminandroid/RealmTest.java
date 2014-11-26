@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.Date;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by keima on 14/11/25.
@@ -26,23 +27,16 @@ public class RealmTest extends OrmTestCase {
 
     @Override
     public void setUp() throws Exception {
-        Log.d(TAG, "setUp()");
         super.setUp();
-
-        // RealmのデータベースはAndroidのdatabasesに置かれないので自分でなんとかする
-        File databasePath = new File(mContext.getFilesDir(), DATABASE_NAME);
-        if (databasePath.exists()) {
-            boolean result = databasePath.delete();
-            Log.d(TAG, result ? "Deleted." : "ERROR!");
-        }
-
         mRealm = Realm.getInstance(mContext, DATABASE_NAME);
     }
 
     @Override
     protected void tearDown() throws Exception {
-        Log.d(TAG, "tearDown()");
         super.tearDown();
+        mRealm.beginTransaction();
+        mRealm.clear(Simple.class);
+        mRealm.commitTransaction();
     }
 
     @Override
@@ -56,9 +50,7 @@ public class RealmTest extends OrmTestCase {
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG,
-                "SingleInsert on Realm (BulkMode:" + (isBulkMode ? "ON" : "OFF") + ")"
-        );
+        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(isBulkMode));
 
         if (isBulkMode) {
             mRealm.beginTransaction();
@@ -88,7 +80,14 @@ public class RealmTest extends OrmTestCase {
             mRealm.commitTransaction();
         }
 
-        logger.addSplit("Insert " + IOrmTestCase.NUMBER_OF_INSERT_SINGLE + " records.");
+        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+
+        RealmResults<Simple> simples = mRealm.where(Simple.class)
+                .equalTo("booleanValue", true)
+                .findAll();
+        assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
+
+        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
         logger.dumpToLog();
     }
 }

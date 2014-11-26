@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by keima on 14/11/18.
  */
 public class Simple {
-    public static final String DATABASE_NAME = "Simple";
+    public static final String DATABASE_NAME = "simple";
 
     public static final String STRING_VALUE = "stringValue";
     public static final String DATE_VALUE = "dateValue";

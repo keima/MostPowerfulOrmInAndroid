@@ -1,10 +1,16 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
+import android.util.Log;
+
+import com.couchbase.lite.CouchbaseLiteException;
+
 import net.pside.android.example.mostpowerfulorminandroid.manager.SimpleModelManager;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
 import net.pside.android.example.mostpowerfulorminandroid.util.TimingLogger;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by keima on 14/11/25.
@@ -22,15 +28,19 @@ public class CouchbaseTest extends OrmTestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-
         mManager = new SimpleModelManager(mContext);
     }
 
     @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        mManager.deleteDatabase();
+        mManager.destroy();
+    }
+
+    @Override
     public void testSingleInsert() {
-        TimingLogger logger = new TimingLogger(TAG,
-                "SingleInsert on Couchbase lite"
-        );
+        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(false));
 
         for (int i = 1; i <= IOrmTestCase.NUMBER_OF_INSERT_SINGLE; i++) {
             Simple simple = new Simple();
@@ -46,7 +56,18 @@ public class CouchbaseTest extends OrmTestCase {
             mManager.save(simple);
         }
 
-        logger.addSplit("Insert " + IOrmTestCase.NUMBER_OF_INSERT_SINGLE + " records.");
+        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        Log.d(TAG, "Checkpoint");
+
+        try {
+            List<Simple> all = mManager.findAll();
+            assertEquals(NUMBER_OF_INSERT_SINGLE / 2, all.size());
+        } catch (IOException | CouchbaseLiteException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
         logger.dumpToLog();
     }
 

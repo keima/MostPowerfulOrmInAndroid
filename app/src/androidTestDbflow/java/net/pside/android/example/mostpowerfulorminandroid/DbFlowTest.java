@@ -1,15 +1,23 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
+import android.content.Context;
+import android.database.DatabaseUtils;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.grosner.dbflow.config.FlowManager;
 import com.grosner.dbflow.runtime.TransactionManager;
+import com.grosner.dbflow.sql.builder.Condition;
+import com.grosner.dbflow.sql.language.Delete;
+import com.grosner.dbflow.sql.language.Select;
 
 import net.pside.android.example.mostpowerfulorminandroid.model.AppDatabase;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
+import net.pside.android.example.mostpowerfulorminandroid.model.Simple$Table;
 import net.pside.android.example.mostpowerfulorminandroid.util.TimingLogger;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by keima on 14/11/25.
@@ -20,7 +28,7 @@ public class DbFlowTest extends OrmTestCase {
     @NonNull
     @Override
     protected String getDatabaseName() {
-        return AppDatabase.NAME;
+        return AppDatabase.NAME + ".db";
     }
 
     @Override
@@ -31,8 +39,10 @@ public class DbFlowTest extends OrmTestCase {
 
     @Override
     protected void tearDown() throws Exception {
-        super.tearDown();
         FlowManager.destroy();
+
+        // DbFlowだけ事情が違うので別途対応する
+        new Delete().from(Simple.class).query();
     }
 
     @Override
@@ -46,12 +56,10 @@ public class DbFlowTest extends OrmTestCase {
     }
 
     public void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG,
-                "SingleInsert on DBFlow (BulkMode:" + (isBulkMode ? "ON" : "OFF") + ")"
-        );
+        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(isBulkMode));
 
         if (isBulkMode) {
-            TransactionManager.transact(getDatabaseName(), new Runnable() {
+            TransactionManager.transact(AppDatabase.NAME, new Runnable() {
                 @Override
                 public void run() {
                     for (int i = 1; i <= IOrmTestCase.NUMBER_OF_INSERT_SINGLE; i++) {
@@ -65,7 +73,14 @@ public class DbFlowTest extends OrmTestCase {
             }
         }
 
-        logger.addSplit("Insert " + IOrmTestCase.NUMBER_OF_INSERT_SINGLE + " records.");
+        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+
+        List<Simple> simpleList = new Select().from(Simple.class)
+                .where(Condition.column(Simple$Table.BOOLEANVALUE).is(true))
+                .queryList();
+        assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simpleList.size());
+
+        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
         logger.dumpToLog();
     }
 

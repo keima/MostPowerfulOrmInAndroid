@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import net.pside.android.example.mostpowerfulorminandroid.util.TimingLogger;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by keima on 14/11/25.
@@ -46,9 +47,7 @@ public class GreenDaoTest extends OrmTestCase {
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG,
-                "SingleInsert on GreenDao (BulkMode:" + (isBulkMode ? "ON" : "OFF") + ")"
-        );
+        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(isBulkMode));
 
         if (isBulkMode) {
             mDaoSession.runInTx(new Runnable() {
@@ -65,7 +64,14 @@ public class GreenDaoTest extends OrmTestCase {
             }
         }
 
-        logger.addSplit("Insert " + IOrmTestCase.NUMBER_OF_INSERT_SINGLE + " records.");
+        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+
+        List<Simple> simpleList = mSimpleDao.queryBuilder()
+                .where(SimpleDao.Properties.BooleanValue.eq(true))
+                .list();
+        assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simpleList.size());
+
+        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
         logger.dumpToLog();
     }
 
