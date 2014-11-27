@@ -1,12 +1,11 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
-import android.util.Log;
-
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
 import net.pside.android.example.mostpowerfulorminandroid.util.TimingLogger;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -88,6 +87,14 @@ public class RealmTest extends OrmTestCase {
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
         logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
+
+        List<Simple> simpleList = new ArrayList<>();
+        for (Simple simple : simples) {
+            simpleList.add(simple);
+        }
+        assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simpleList.size());
+
+        logger.addSplit("Manual Import!: " + MSG_LOGGER_SPLIT_SELECT);
         logger.dumpToLog();
     }
 }

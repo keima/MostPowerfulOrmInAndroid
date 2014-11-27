@@ -3,6 +3,8 @@ package net.pside.android.example.mostpowerfulorminandroid;
 import android.util.Log;
 
 import com.couchbase.lite.CouchbaseLiteException;
+import com.couchbase.lite.Database;
+import com.couchbase.lite.Manager;
 
 import net.pside.android.example.mostpowerfulorminandroid.manager.SimpleModelManager;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
@@ -57,10 +59,12 @@ public class CouchbaseTest extends OrmTestCase {
         }
 
         logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
-        Log.d(TAG, "Checkpoint");
+
 
         try {
-            List<Simple> all = mManager.findAll();
+            Manager manager = mManager.getManager();
+            Database database = manager.getDatabase(Simple.DATABASE_NAME);
+            List<Simple> all = mManager.findAll(database);
             assertEquals(NUMBER_OF_INSERT_SINGLE / 2, all.size());
         } catch (IOException | CouchbaseLiteException e) {
             e.printStackTrace();

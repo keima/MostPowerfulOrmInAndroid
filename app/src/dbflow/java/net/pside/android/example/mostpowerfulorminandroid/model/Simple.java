@@ -2,7 +2,6 @@ package net.pside.android.example.mostpowerfulorminandroid.model;
 
 import android.provider.BaseColumns;
 
-import com.google.common.primitives.Bytes;
 import com.grosner.dbflow.annotation.Column;
 import com.grosner.dbflow.annotation.Table;
 import com.grosner.dbflow.structure.BaseModel;

@@ -6,10 +6,13 @@ import android.util.Log;
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.Document;
+import com.couchbase.lite.Emitter;
 import com.couchbase.lite.Manager;
+import com.couchbase.lite.Mapper;
 import com.couchbase.lite.Query;
 import com.couchbase.lite.QueryEnumerator;
 import com.couchbase.lite.QueryRow;
+import com.couchbase.lite.View;
 import com.couchbase.lite.android.AndroidContext;
 
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
@@ -64,6 +67,23 @@ public class SimpleModelManager {
         }
     }
 
+    public Simple load(Document document) {
+        Simple simple = new Simple();
+        simple.stringValue = (String) document.getProperty(Simple.STRING_VALUE);
+        simple.dateValue = new Date(Converter.toLong((Integer) document.getProperty(Simple.DATE_VALUE)));
+        simple.booleanValue = (boolean) document.getProperty(Simple.BOOLEAN_VALUE);
+        simple.shortValue = ((Integer) document.getProperty(Simple.SHORT_VALUE)).shortValue();
+        simple.intValue = (Integer) document.getProperty(Simple.INT_VALUE);
+        simple.longValue = ((Integer) document.getProperty(Simple.LONG_VALUE)).longValue();
+        simple.floatValue = ((Double) document.getProperty(Simple.FLOAT_VALUE)).floatValue();
+        simple.doubleValue = ((Double) document.getProperty(Simple.DOUBLE_VALUE));
+
+        return simple;
+    }
+
+    /**
+     * @deprecated 一応残しておくけど、このやり方( document.getProperties()を引数に取る )をすると激烈に重い
+     */
     public Simple load(Map<String, Object> content) {
         Simple simple = new Simple();
         simple.stringValue = (String) content.get(Simple.STRING_VALUE);
@@ -78,31 +98,33 @@ public class SimpleModelManager {
         return simple;
     }
 
+    public View getCouchView(Database database) {
+        View view = database.getView(Simple.VIEW_NAME);
+        if (view.getMap() == null) {
+            Mapper map = new Mapper() {
+                @Override
+                public void map(Map<String, Object> document, Emitter emitter) {
+                    Object o = document.get(Simple.DATE_VALUE);
+                    emitter.emit(o, document);
+                }
+            };
+            view.setMap(map, "1");
+        }
+        return view;
+    }
 
-    public List<Simple> findAll() throws IOException, CouchbaseLiteException {
+    public List<Simple> findAll(Database database) throws IOException, CouchbaseLiteException {
         List<Simple> simpleList = new ArrayList<>();
+        View view = getCouchView(database);
 
-        Manager manager = getManager();
-        Database database = manager.getDatabase(Simple.DATABASE_NAME);
-//        View view = database.getView("booleanValue");
-//        view.setMap(new Mapper() {
-//            @Override
-//            public void map(Map<String, Object> stringObjectMap, Emitter emitter) {
-//                Object value = stringObjectMap.get("booleanValue");
-//                if (value != null) {
-//                    emitter.emit(value, null);
-//                }
-//            }
-//        }, "1");
-
-        Query query = database.createAllDocumentsQuery();
+        Query query = view.createQuery();
 
         QueryEnumerator result = query.run();
-        Log.d("Manager", result.getCount() + "");
+        Log.d("CouchbaseManager", result.getCount() + "");
+
         for (; result.hasNext(); ) {
             QueryRow row = result.next();
-            Map<String, Object> properties = row.getDocument().getProperties();
-            Simple simple = load(properties);
+            Simple simple = load(row.getDocument());
             if (simple.booleanValue) {
                 simpleList.add(simple);
             }
@@ -110,7 +132,7 @@ public class SimpleModelManager {
         return simpleList;
     }
 
-    private Manager getManager() throws IOException {
+    public Manager getManager() throws IOException {
         if (mManager == null) {
             mManager = new Manager(new AndroidContext(mContext), Manager.DEFAULT_OPTIONS);
         }
