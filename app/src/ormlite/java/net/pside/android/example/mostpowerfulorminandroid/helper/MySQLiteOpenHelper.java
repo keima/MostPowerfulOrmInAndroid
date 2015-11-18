@@ -39,7 +39,6 @@ public class MySQLiteOpenHelper extends OrmLiteSqliteOpenHelper {
     public void onUpgrade(SQLiteDatabase database, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         for (;oldVersion <= newVersion; oldVersion++) {
             System.out.println("oldVersion: " + oldVersion);
-
         }
     }
 
