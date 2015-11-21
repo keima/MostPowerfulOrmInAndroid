@@ -83,7 +83,7 @@ dependencies {
     greendaoCompile 'de.greenrobot:greendao:2.1.0'
 
     // ActiveAndroid
-    activeandroidCompile(name: 'activeandroid-3.0', ext: 'jar')
+    activeandroidCompile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
 
     ///// 中堅クラス /////
     // Ollie

@@ -16,6 +16,7 @@ allprojects {
         mavenCentral()
         jcenter()
         maven { url "http://maven.rushorm.com" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
 }
 
