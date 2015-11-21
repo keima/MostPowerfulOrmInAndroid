@@ -1,7 +1,9 @@
+*.iml
 .gradle
 /local.properties
 /.idea
 .DS_Store
+/build
+/captures
 build/
-*.iml
 realm_version_check.timestamp
