@@ -1,7 +1,10 @@
-package net.pside.android.example.mostpowerfulorminandroid.model_template;
+package net.pside.android.example.mostpowerfulorminandroid.model;
 
 import java.util.Date;
 
+/**
+ * Created by keima on 14/11/18.
+ */
 public class Simple {
     public String stringValue;
     public Date dateValue;
