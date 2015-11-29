@@ -172,11 +172,11 @@ dbtools {
     basePackageName android.defaultConfig.applicationId
     outputSrcDir 'app/src/dbtools/java/net/pside/android/example/mostpowerfulorminandroid'
 
-    injectionSupport true // support for @Inject (using JEE, Dagger, Guice, etc)
+    injectionSupport false // support for @Inject (using JEE, Dagger, Guice, etc)
     jsr305Support true // support for @Notnull / @Nullable etc
     includeDatabaseNameInPackage true
     // place each set of domain objects into a package named after its database
-    eventBusSupport true // support Event Bus
-    dateTimeSupport true // support Joda DateTime
+    eventBusSupport false // support Event Bus
+    dateTimeSupport false // support Joda DateTime
     rxJavaSupport true // support RxJava
 }

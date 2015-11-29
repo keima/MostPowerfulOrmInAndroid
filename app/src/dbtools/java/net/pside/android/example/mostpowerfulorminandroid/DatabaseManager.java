@@ -4,26 +4,18 @@ package net.pside.android.example.mostpowerfulorminandroid;
 import android.util.Log;
 import android.app.Application;
 import org.dbtools.android.domain.AndroidDatabase;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import org.dbtools.android.domain.database.DatabaseWrapper;
 import org.dbtools.android.domain.database.AndroidDatabaseWrapper;
 
 
-@Singleton
 public class DatabaseManager extends DatabaseBaseManager {
 
-    @Inject
-     Application application;
-    public static final int MAIN_VERSION = 1;
-    public static final int MAIN_VIEWS_VERSION = 1;
-
-    @javax.inject.Inject
-    public DatabaseManager() {
-    }
+    private Application application;
+    public static final int DBTOOLS_VERSION = 1;
+    public static final int DBTOOLS_VIEWS_VERSION = 1;
 
     public void identifyDatabases() {
-        addDatabase(application, MAIN_DATABASE_NAME, MAIN_VERSION, MAIN_VIEWS_VERSION);
+        addDatabase(application, DBTOOLS_DATABASE_NAME, DBTOOLS_VERSION, DBTOOLS_VIEWS_VERSION);
     }
 
     public DatabaseWrapper createNewDatabaseWrapper(AndroidDatabase androidDatabase) {
@@ -40,6 +32,10 @@ public class DatabaseManager extends DatabaseBaseManager {
         Log.i(TAG, "Upgrading database [" + databaseName + "] VIEWS from version " + oldVersion + " to " + newVersion);
         // automatically drop/create views
         super.onUpgradeViews(androidDatabase, oldVersion, newVersion);
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
     }
 
 
