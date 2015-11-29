@@ -127,8 +127,8 @@ dependencies {
     squidbCompile 'com.yahoo.squidb:squidb-annotations:2.0.1'
 
     // Orma
-    apt 'com.github.gfx.android.orma:orma-processor:0.6.0'
-    ormaCompile 'com.github.gfx.android.orma:orma:0.6.0'
+    apt 'com.github.gfx.android.orma:orma-processor:0.8.0'
+    ormaCompile 'com.github.gfx.android.orma:orma:0.8.0'
 
     // EasyliteORM
     compile 'com.easyliteorm:easyliteorm:1.2.0'

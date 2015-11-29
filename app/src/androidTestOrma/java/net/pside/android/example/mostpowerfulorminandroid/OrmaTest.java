@@ -1,8 +1,8 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
+import com.github.gfx.android.orma.AccessThreadConstraint;
 import com.github.gfx.android.orma.Inserter;
 import com.github.gfx.android.orma.TransactionTask;
-import com.github.gfx.android.orma.adapter.TypeAdapterRegistry;
 
 import net.pside.android.example.mostpowerfulorminandroid.model.OrmaDatabase;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
@@ -28,8 +28,12 @@ public class OrmaTest extends OrmTestCase {
     public void setUp() throws Exception {
         super.setUp();
 
-        db = new OrmaDatabase(getContext(), getDatabaseName());
-        db.addTypeAdapters(TypeAdapterRegistry.defaultTypeAdapters());
+        db = OrmaDatabase.builder(getContext())
+                .name(getDatabaseName())
+                .writeAheadLogging(false)
+                .readOnMainThread(AccessThreadConstraint.NONE)
+                .writeOnMainThread(AccessThreadConstraint.NONE)
+                .build();
         db.getConnection().resetDatabase();
     }
 
@@ -47,7 +51,7 @@ public class OrmaTest extends OrmTestCase {
         TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(isBulkMode));
 
         if (isBulkMode) {
-            db.transaction(new TransactionTask() {
+            db.transactionSync(new TransactionTask() {
                 @Override
                 public void execute() throws Exception {
                     Inserter<Simple> inserter = db.prepareInsertIntoSimple();
