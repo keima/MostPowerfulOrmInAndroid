@@ -13,5 +13,4 @@ public class Simple {
     public long longValue;
     public float floatValue;
     public double doubleValue;
-
 }

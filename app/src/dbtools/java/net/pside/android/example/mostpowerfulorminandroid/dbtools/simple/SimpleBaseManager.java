@@ -11,9 +11,12 @@ package net.pside.android.example.mostpowerfulorminandroid.dbtools.simple;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+
+import org.dbtools.android.domain.AndroidBaseManager;
 import org.dbtools.android.domain.database.DatabaseWrapper;
-import java.util.List;
+
 import java.util.ArrayList;
+import java.util.List;
 
 
 @SuppressWarnings("all")

@@ -6,29 +6,11 @@ import android.util.Log;
 import java.io.File;
 import java.util.Date;
 
-/**
- * Created by keima on 14/11/25.
- */
 public abstract class OrmTestCase extends AndroidTestCase implements IOrmTestCase {
-
-    protected abstract String getDatabaseName();
 
     public static String MSG_LOGGER_INITIALIZE(boolean isBulkMode) {
         return "Insert on " + BuildConfig.FLAVOR.toUpperCase() +
                 " (BulkMode:" + (isBulkMode ? "ON" : "OFF") + ")";
-    }
-
-    public static final String MSG_LOGGER_SPLIT_INSERT =
-            "Insert " + NUMBER_OF_INSERT_SINGLE + " records.";
-
-    public static final String MSG_LOGGER_SPLIT_SELECT =
-            "Select Records.";
-
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-//        deleteDatabaseIfNeeded(getDatabaseName());
     }
 
     @Override
