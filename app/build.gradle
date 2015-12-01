@@ -19,12 +19,14 @@ android {
         versionCode 2
         versionName "2015.1"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     productFlavors {
         ormlite
         greendao
@@ -53,11 +55,13 @@ android {
         paper
         sabres
     }
+
     sourceSets {
         greendao {
             java.srcDirs = ['src/greendao/java-gen']
         }
     }
+
     packagingOptions {
         exclude 'META-INF/ASL2.0'
         exclude 'META-INF/LICENSE'
@@ -166,13 +170,13 @@ dbtools {
     type 'ANDROID'
 
     basePackageName android.defaultConfig.applicationId
-    outputSrcDir 'src/main/java/net/pside/android/example/mostpowerfulorminandroid'
+    outputSrcDir 'app/src/dbtools/java/net/pside/android/example/mostpowerfulorminandroid'
 
-    injectionSupport true // support for @Inject (using JEE, Dagger, Guice, etc)
+    injectionSupport false // support for @Inject (using JEE, Dagger, Guice, etc)
     jsr305Support true // support for @Notnull / @Nullable etc
     includeDatabaseNameInPackage true
     // place each set of domain objects into a package named after its database
-    eventBusSupport true // support Event Bus
-    dateTimeSupport true // support Joda DateTime
+    eventBusSupport false // support Event Bus
+    dateTimeSupport false // support Joda DateTime
     rxJavaSupport true // support RxJava
 }

@@ -13,9 +13,6 @@ import net.pside.android.example.mostpowerfulorminandroid.util.TimingLogger;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by keima on 14/11/22.
- */
 public class ActiveAndroidTest extends OrmTestCase {
     public static final String TAG = ActiveAndroidTest.class.getSimpleName();
 

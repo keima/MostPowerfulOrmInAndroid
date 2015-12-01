@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dbSchema xmlns='https://github.com/jeffdcamp/dbtools-gen'
+          xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+          xsi:schemaLocation='https://github.com/jeffdcamp/dbtools-gen dbschema.xsd'>
+
+    <database name="dbtools" fieldsDefaultNotNull="true">
+
+        <table name="Simple">
+            <field name="_id" jdbcDataType="BIGINT" increment="true" primaryKey="true" notNull="true"/>
+            <field name="STRING_VALUE" jdbcDataType="VARCHAR" size="255" />
+            <field name="DATE_VALUE" jdbcDataType="DATE" />
+            <field name="BOOLEAN_VALUE" jdbcDataType="BOOLEAN" />
+            <field name="BLOB_VALUE" jdbcDataType="BLOB" />
+            <field name="SHORT_VALUE" jdbcDataType="SMALLINT" />
+            <field name="INT_VALUE" jdbcDataType="INTEGER" />
+            <field name="LONG_VALUE" jdbcDataType="BIGINT" />
+            <field name="FLOAT_VALUE" jdbcDataType="FLOAT" />
+            <field name="DOUBLE_VALUE" jdbcDataType="DOUBLE" />
+        </table>
+
+
+        <!--<table name="INDIVIDUAL_TYPE" className="IndividualType" enumerations="HEAD,SPOUSE,CHILD" readOnly="true">-->
+            <!--<field name="_id" jdbcDataType="BIGINT" increment="true" primaryKey="true" notNull="true"/>-->
+            <!--<field name="NAME" jdbcDataType="VARCHAR" size="255" notNull="true" unique="true"/>-->
+        <!--</table>-->
+
+        <!--<table name="INDIVIDUAL">-->
+            <!--<field name="_id" jdbcDataType="BIGINT" increment="true" primaryKey="true" notNull="true"/>-->
+            <!--<field name="INDIVIDUAL_TYPE_ID" jdbcDataType="INTEGER" varName="individualType" foreignKeyTable="INDIVIDUAL_TYPE" foreignKeyField="_id" foreignKeyType="ENUM" enumerationDefault="HEAD"/>-->
+            <!--<field name="NAME" jdbcDataType="VARCHAR" size="255" notNull="true"/>-->
+            <!--<field name="BIRTH_DATE" jdbcDataType="DATE"/>-->
+            <!--<field name="NUMBER" jdbcDataType="INTEGER"/>-->
+            <!--<field name="PHONE" jdbcDataType="VARCHAR" size="255"/>-->
+            <!--<field name="EMAIL" jdbcDataType="VARCHAR" size="255"/>-->
+            <!--<field name="DATA" jdbcDataType="BLOB"/>-->
+        <!--</table>-->
+
+        <!--<view name="INDIVIDUAL_VIEW">-->
+            <!--<field name="id" jdbcDataType="BIGINT"/>-->
+            <!--<field name="NAME" jdbcDataType="VARCHAR" size="255" notNull="true"/>-->
+        <!--</view>-->
+
+        <!--<query name="INDIVIDUAL_QUERY">-->
+            <!--<field name="id" jdbcDataType="BIGINT"/>-->
+            <!--<field name="NAME" jdbcDataType="VARCHAR" size="255" notNull="true"/>-->
+            <!--<field name="LOCATION_TYPE" jdbcDataType="INTEGER" enumerationClass="LocationType" enumerationDefault="HOME"/>-->
+        <!--</query>-->
+    </database>
+</dbSchema>
