@@ -1,0 +1,27 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultPublishConfig "libRelease"
+    publishNonDefault true
+
+    resourcePrefix 'mylib_'
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 23
+    }
+
+    productFlavors {
+        // flavor を定義しないと、app から debug/release を指定して依存を記述できないので。
+        lib
+    }
+
+    compileOptions {
+        encoding = "UTF-8"
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}

@@ -3,7 +3,7 @@ project(':DaoGenerator') {
     apply plugin: 'groovy'
 
     mainClassName = "com.example.MyDaoGenerator"
-    def outputDir = "../app/src/greendao/java-gen"
+    def outputDir = "../appGreendao/src/main/java-gen"
 
     dependencies {
         compile 'org.codehaus.groovy:groovy-all:2.0.5'

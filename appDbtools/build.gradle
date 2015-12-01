@@ -1,0 +1,60 @@
+apply plugin: 'com.android.application'
+apply plugin: 'dbtools'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId rootProject.ext.applicationId
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/README'
+        exclude 'META-INF/NOTICE'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+dependencies {
+    compile project(":library")
+    testCompile 'junit:junit:4.12'
+    compile "com.android.support:support-v4:${supportPackageVersion}"
+
+    compile 'org.codejargon.feather:feather:1.0'
+    compile 'io.reactivex:rxjava:1.0.16'
+
+    compile 'org.dbtools:dbtools-android:4.1.2'
+    compile 'org.dbtools:dbtools-query:2.5.6' // optional
+}
+
+dbtools {
+    type 'ANDROID'
+
+    basePackageName android.defaultConfig.applicationId
+    outputSrcDir 'appDbtools/src/main/java/net/pside/android/example/mostpowerfulorminandroid'
+
+    injectionSupport true // support for @Inject (using JEE, Dagger, Guice, etc)
+    jsr305Support true // support for @Notnull / @Nullable etc
+    includeDatabaseNameInPackage true
+    // place each set of domain objects into a package named after its database
+    eventBusSupport false // support Event Bus
+    dateTimeSupport false // support Joda DateTime
+    rxJavaSupport true // support RxJava
+}
