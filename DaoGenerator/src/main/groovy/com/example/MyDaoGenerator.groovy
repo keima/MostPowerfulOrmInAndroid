@@ -27,6 +27,8 @@ public class MyDaoGenerator {
         simple.addFloatProperty("floatValue");
         simple.addDoubleProperty("doubleValue");
 
+        // 以下はいまのところ使いみちがないのでコメントアウトします
+        /*
         def entities = new Entity[5];
         def entityNames = [
                 "ChildOne",
@@ -54,6 +56,7 @@ public class MyDaoGenerator {
                 entity.addToOne(entities[i], property)
             }
         }
+        */
 
         println "> Generating Schema and Entity: ${args[0]}"
         new DaoGenerator().generateAll(schema, args[0]);

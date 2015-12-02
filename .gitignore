@@ -11,3 +11,4 @@
 build/
 
 realm_version_check.timestamp
+gradle.xml

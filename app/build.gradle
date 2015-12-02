@@ -74,10 +74,18 @@ android {
         targetCompatibility JavaVersion.VERSION_1_7
     }
 }
+
+configurations {
+    provided
+}
+
 dependencies {
 //    compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:support-v4:23.1.1'
+
+    compile project(":library")
+
 
     ///// 古参ORM /////
     // ORMLite
@@ -107,8 +115,8 @@ dependencies {
     dbToolsCompile 'org.dbtools:dbtools-query:2.5.6' // optional
 
     // Shillelagh
-    shillelaghCompile 'com.andrewreitz:shillelagh:0.5.0'
     shillelaghProvided 'com.andrewreitz:shillelagh-processor:0.5.0'
+    shillelaghCompile 'com.andrewreitz:shillelagh:0.5.0'
 
     // Torch
     apt "org.brightify.torch:torch-compiler:1.0.0-alpha.3"
@@ -180,3 +188,16 @@ dbtools {
     dateTimeSupport false // support Joda DateTime
     rxJavaSupport true // support RxJava
 }
+
+// Android's version of sourceSets.main.compileClasspath
+android.applicationVariants.all { variant ->
+    if (variant.name == "shillelaghDebug") {
+        variant.javaCompile.classpath += configurations.provided
+        println "|" + variant.javaCompile.classpath.getAsPath()
+        println "|" + variant.javaCompile.destinationDir.getPath()
+    }
+}
+
+//android.sourceSets.all{ sourceSet ->
+//    println sourceSet //.output.getDirs().getAsPath()
+//}

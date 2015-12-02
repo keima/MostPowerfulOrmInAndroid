@@ -3,14 +3,13 @@
           xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
           xsi:schemaLocation='https://github.com/jeffdcamp/dbtools-gen dbschema.xsd'>
 
-    <database name="dbtools" fieldsDefaultNotNull="true">
+    <database name="dbtools" fieldsDefaultNotNull="false">
 
         <table name="Simple">
             <field name="_id" jdbcDataType="BIGINT" increment="true" primaryKey="true" notNull="true"/>
             <field name="STRING_VALUE" jdbcDataType="VARCHAR" size="255" />
             <field name="DATE_VALUE" jdbcDataType="DATE" />
             <field name="BOOLEAN_VALUE" jdbcDataType="BOOLEAN" />
-            <field name="BLOB_VALUE" jdbcDataType="BLOB" />
             <field name="SHORT_VALUE" jdbcDataType="SMALLINT" />
             <field name="INT_VALUE" jdbcDataType="INTEGER" />
             <field name="LONG_VALUE" jdbcDataType="BIGINT" />

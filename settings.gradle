@@ -1,1 +1,16 @@
-include ':app', ':DaoGenerator'
+//include ':app'
+include ':library'
+
+//include ':appActiveandroid'
+//include ':appCouchbase'
+//include ':appDbflow'
+//include ':appDbtools'
+//include ':appGreendao', ':DaoGenerator'
+//include 'appOrma'
+//include 'appOrmlite'
+//include 'appRealm'
+//include 'appShillelagh'
+include 'appSugarorm'
+
+
+

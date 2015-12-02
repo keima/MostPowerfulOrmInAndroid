@@ -1,0 +1,16 @@
+package net.pside.android.example.mostpowerfulorminandroid.library;
+
+public interface IOrmTestCase {
+    int NUMBER_OF_INSERT_SINGLE = 10000;
+
+    String MSG_LOGGER_SPLIT_INSERT = "Insert " + NUMBER_OF_INSERT_SINGLE + " records.";
+
+    String MSG_LOGGER_SPLIT_SELECT = "Select Records.";
+
+    String getDatabaseName();
+
+    void testSingleInsert();
+
+    void testSingleBulkInsert();
+
+}
