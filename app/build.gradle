@@ -89,18 +89,18 @@ dependencies {
 
     ///// 古参ORM /////
     // ORMLite
-    ormliteCompile 'com.j256.ormlite:ormlite-android:4.48'
+//    ormliteCompile 'com.j256.ormlite:ormlite-android:4.48'
 
     // greenDAO
-    greendaoCompile 'de.greenrobot:greendao:2.1.0'
+//    greendaoCompile 'de.greenrobot:greendao:2.1.0'
 
     // ActiveAndroid
-    activeandroidCompile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+//    activeandroidCompile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
 
     ///// 中堅クラス /////
     // Ollie
-    ollieProvided 'com.michaelpardo:ollie-compiler:0.3.1'
-    ollieCompile 'com.michaelpardo:ollie:0.3.1'
+//    ollieProvided 'com.michaelpardo:ollie-compiler:0.3.1'
+//    ollieCompile 'com.michaelpardo:ollie:0.3.1'
 
     // SugarORM
     sugarormCompile 'com.github.satyan:sugar:1.4'
