@@ -8,7 +8,7 @@ import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
 import java.util.Date;
 
 public class HogeFugaTest extends OrmTestCase {
-    public static final String TAG = TorchTest.class.getSimpleName();
+    public static final String TAG = HogeFugaTest.class.getSimpleName();
     public static final String DATABASE_NAME = "torch.db";
 
     @Override
@@ -49,7 +49,7 @@ public class HogeFugaTest extends OrmTestCase {
 
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
         logger.dumpToLog();
     }
 

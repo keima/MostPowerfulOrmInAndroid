@@ -8,6 +8,8 @@ import java.util.Date;
 
 public abstract class OrmTestCase extends AndroidTestCase implements IOrmTestCase {
 
+    protected boolean stopDatabaseCleanup = false;
+
     public static String MSG_LOGGER_INITIALIZE(String flavor, boolean isBulkMode) {
         return "Insert on " + flavor.toUpperCase() + " (BulkMode:" + (isBulkMode ? "ON" : "OFF") + ")";
     }
@@ -15,7 +17,9 @@ public abstract class OrmTestCase extends AndroidTestCase implements IOrmTestCas
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
-        renameDatabase(getDatabaseName());
+        if (!stopDatabaseCleanup) {
+            renameDatabase(getDatabaseName());
+        }
     }
 
     protected void deleteDatabaseIfNeeded(String databaseName) {

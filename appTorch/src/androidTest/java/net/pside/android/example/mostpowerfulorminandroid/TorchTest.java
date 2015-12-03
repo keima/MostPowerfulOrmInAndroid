@@ -70,7 +70,7 @@ public class TorchTest extends OrmTestCase {
 
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
         logger.dumpToLog();
     }
 

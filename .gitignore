@@ -3,7 +3,6 @@
 /local.properties
 .idea/.name
 .idea/*.xml
-!.idea/gradle.xml
 .idea/libraries/
 .DS_Store
 /build
@@ -11,4 +10,3 @@
 build/
 
 realm_version_check.timestamp
-gradle.xml

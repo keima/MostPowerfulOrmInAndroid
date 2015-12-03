@@ -9,6 +9,8 @@ import java.util.Date;
 
 public abstract class ApplicationOrmTestCase<T extends Application> extends ApplicationTestCase<T> implements IOrmTestCase {
 
+    protected boolean stopDatabaseCleanup = false;
+
     public static String MSG_LOGGER_INITIALIZE(String flavor, boolean isBulkMode) {
         return "Insert on " + flavor.toUpperCase() + " (BulkMode:" + (isBulkMode ? "ON" : "OFF") + ")";
     }
@@ -18,9 +20,16 @@ public abstract class ApplicationOrmTestCase<T extends Application> extends Appl
     }
 
     @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+    }
+
+    @Override
     protected void tearDown() throws Exception {
-        super.tearDown();
-        renameDatabase(getDatabaseName());
+        super.tearDown(); // terminateApplication() もここでやっている
+        if (!stopDatabaseCleanup) {
+            renameDatabase(getDatabaseName());
+        }
     }
 
     protected void deleteDatabaseIfNeeded(String dbName) {
