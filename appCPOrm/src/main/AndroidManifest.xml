@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    package="net.pside.android.example.mostpowerfulorminandroid"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application android:name=".MyApp">
+        <meta-data
+            android:name="CPORM_CONFIG"
+            android:value="${applicationId}.model.MyCPOrmConfiguration"/>
+        <meta-data
+            android:name="AUTHORITY"
+            android:value="${applicationId}"/> <!-- Should match provider-->
+
+        <!-- Should match the Authority Meta Tag-->
+        <provider
+            android:name="za.co.cporm.provider.CPOrmContentProvider"
+            android:authorities="${applicationId}"
+            android:exported="false"
+            android:process=":provider"/>
+    </application>
+</manifest>
