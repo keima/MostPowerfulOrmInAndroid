@@ -63,7 +63,7 @@ public class OrmaTest extends OrmTestCase {
                 }
             });
         } else {
-            for (int i = 1; i <= IOrmTestCase.NUMBER_OF_INSERT_SINGLE; i++) {
+            for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
                 db.insertIntoSimple(createSimple(i));
             }
         }
