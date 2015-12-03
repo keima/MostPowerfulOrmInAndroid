@@ -17,5 +17,5 @@ include ':library'
 //include 'appSlimrepo'
 //include 'appRushorm'
 //include 'appSquidb'
-include 'appEasyliteORM'
-
+//include 'appEasyliteORM'
+include 'appTriORM'
