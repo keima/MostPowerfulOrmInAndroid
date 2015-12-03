@@ -11,7 +11,10 @@ include ':library'
 //include 'appRealm'
 //include 'appShillelagh'
 //include 'appSugarorm'
-include 'appOllie'
-
-
+//include 'appOllie'
+//include 'appTorch'
+//include 'appCupboard'
+//include 'appSlimrepo'
+//include 'appRushorm'
+include 'appSquidb'
 
