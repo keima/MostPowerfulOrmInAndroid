@@ -9,8 +9,8 @@ public interface IOrmTestCase {
 
     String getDatabaseName();
 
-    void testSingleInsert();
+    void testSingleInsert() throws Exception;
 
-    void testSingleBulkInsert();
+    void testSingleBulkInsert() throws Exception;
 
 }
