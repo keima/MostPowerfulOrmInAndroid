@@ -1,13 +1,17 @@
+apply plugin: 'com.github.ben-manes.versions'
+
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.5.0'
+
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
 
-        // DBTools
         classpath 'org.dbtools:gradle-dbtools-plugin:4.0.2'
+
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
     }
 }
 

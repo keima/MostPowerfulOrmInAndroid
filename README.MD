@@ -1,5 +1,9 @@
 # Most Powerful ORM in Android
 
+## Check Dependency is Outdated
+
+1. `./gradlew dependencyUpdates`
+
 ## How to use
 
 1. git clone https://github.com/keima/MostPowerfulOrmInAndroid.git
@@ -20,7 +24,7 @@
 # License
 
 ```
-Copyright (C) 2014 Kouta Imanaka. All rights reserved.
+Copyright (C) 2014-2015 Kouta Imanaka. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 this file except in compliance with the License. You may obtain a copy of the
