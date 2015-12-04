@@ -38,7 +38,7 @@ dependencies {
     compile "com.android.support:support-v4:${supportPackageVersion}"
 
     compile 'org.codejargon.feather:feather:1.0'
-    compile 'io.reactivex:rxjava:1.0.16'
+    compile 'io.reactivex:rxjava:1.1.0'
 
     compile 'org.dbtools:dbtools-android:4.1.2'
     compile 'org.dbtools:dbtools-query:2.5.6' // optional

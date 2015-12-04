@@ -38,7 +38,7 @@ dependencies {
     compile "com.android.support:support-v4:${supportPackageVersion}"
 
     // input compile , provided or apt dependency here
-    compile 'com.slimgears.slimrepo:slimrepo-android:0.9.0'
-    apt 'com.slimgears.slimrepo:slimrepo-apt:0.9.0'
+    compile 'com.slimgears.slimrepo:slimrepo-android:0.9.1'
+    apt 'com.slimgears.slimrepo:slimrepo-apt:0.9.1'
 
 }

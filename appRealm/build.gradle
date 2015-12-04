@@ -36,6 +36,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile "com.android.support:support-v4:${supportPackageVersion}"
 
-    compile 'io.realm:realm-android:0.84.2'
+    compile 'io.realm:realm-android:0.86.0'
 
 }
