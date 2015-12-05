@@ -35,6 +35,7 @@ public class OrmaTest extends OrmTestCase {
                 .writeAheadLogging(false)
                 .readOnMainThread(AccessThreadConstraint.NONE)
                 .writeOnMainThread(AccessThreadConstraint.NONE)
+                .trace(false)
                 .build();
         db.getConnection().resetDatabase();
     }
