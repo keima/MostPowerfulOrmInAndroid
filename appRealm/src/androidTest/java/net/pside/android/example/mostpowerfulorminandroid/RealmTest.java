@@ -18,7 +18,6 @@ public class RealmTest extends OrmTestCase {
     public static final String DATABASE_NAME = "Realm.realm";
 
     private Realm mRealm;
-    volatile String vStr;
 
     @Override
     public String getDatabaseName() {
@@ -101,13 +100,6 @@ public class RealmTest extends OrmTestCase {
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simpleList.size());
 
         logger.addSplit("Manual Import!");
-
-        for (Simple simple : simples) {
-            vStr = simple.getStringValue();
-        }
-
-        logger.addSplit("Fetching data!");
-
         logger.dumpToLog();
     }
 }

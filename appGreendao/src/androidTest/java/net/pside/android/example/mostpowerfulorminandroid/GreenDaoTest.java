@@ -3,7 +3,6 @@ package net.pside.android.example.mostpowerfulorminandroid;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
-import net.pside.android.example.mostpowerfulorminandroid.library.IOrmTestCase;
 import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
 import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
 
@@ -52,13 +51,13 @@ public class GreenDaoTest extends OrmTestCase {
             mDaoSession.runInTx(new Runnable() {
                 @Override
                 public void run() {
-                    for (int i = 1; i <= IOrmTestCase.NUMBER_OF_INSERT_SINGLE; i++) {
+                    for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
                         insertSingle(i);
                     }
                 }
             });
         } else {
-            for (int i = 1; i <= IOrmTestCase.NUMBER_OF_INSERT_SINGLE; i++) {
+            for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
                 insertSingle(i);
             }
         }

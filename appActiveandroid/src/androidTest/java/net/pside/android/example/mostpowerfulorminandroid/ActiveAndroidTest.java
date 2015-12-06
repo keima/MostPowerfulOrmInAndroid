@@ -6,7 +6,6 @@ import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
 import com.activeandroid.query.Select;
 
-import net.pside.android.example.mostpowerfulorminandroid.library.IOrmTestCase;
 import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
 import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
@@ -55,7 +54,7 @@ public class ActiveAndroidTest extends OrmTestCase {
             ActiveAndroid.beginTransaction();
         }
 
-        for (int i = 1; i <= IOrmTestCase.NUMBER_OF_INSERT_SINGLE; i++) {
+        for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
             Simple simple = new Simple();
             simple.stringValue = "TestData" + i;
             simple.dateValue = new Date(i * 1000);

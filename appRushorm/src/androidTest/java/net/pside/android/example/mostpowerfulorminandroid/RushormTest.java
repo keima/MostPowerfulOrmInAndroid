@@ -3,7 +3,6 @@ package net.pside.android.example.mostpowerfulorminandroid;
 import android.app.Application;
 
 import net.pside.android.example.mostpowerfulorminandroid.library.ApplicationOrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
 import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
 import net.pside.android.example.mostpowerfulorminandroid.model.SetupObject;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import co.uk.rushorm.android.AndroidInitializeConfig;
 import co.uk.rushorm.android.RushAndroid;
 import co.uk.rushorm.core.RushCore;
 import co.uk.rushorm.core.RushSearch;
@@ -61,7 +59,7 @@ public class RushormTest extends ApplicationOrmTestCase<Application> {
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        TimingLogger logger = new TimingLogger(TAG, isBulkMode ? MSG_LOGGER_INITIALIZE_BULK_ON : MSG_LOGGER_INITIALIZE_BULK_OFF);
 
         if (isBulkMode) {
             ArrayList<Simple> simpleList = new ArrayList<>();

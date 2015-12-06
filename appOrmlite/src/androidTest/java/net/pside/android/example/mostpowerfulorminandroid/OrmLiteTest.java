@@ -6,7 +6,6 @@ import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 
 import net.pside.android.example.mostpowerfulorminandroid.helper.MySQLiteOpenHelper;
-import net.pside.android.example.mostpowerfulorminandroid.library.IOrmTestCase;
 import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
 import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
@@ -56,7 +55,7 @@ public class OrmLiteTest extends OrmTestCase {
                 TransactionManager.callInTransaction(mSimpleDao.getConnectionSource(), new Callable<Void>() {
                     @Override
                     public Void call() throws Exception {
-                        for (int i = 1; i <= IOrmTestCase.NUMBER_OF_INSERT_SINGLE; i++) {
+                        for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
                             insertSingle(i);
                         }
                         return null;
@@ -67,7 +66,7 @@ public class OrmLiteTest extends OrmTestCase {
                 fail();
             }
         } else {
-            for (int i = 1; i <= IOrmTestCase.NUMBER_OF_INSERT_SINGLE; i++) {
+            for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
                 try {
                     insertSingle(i);
                 } catch (SQLException e) {

@@ -14,7 +14,7 @@ import java.util.List;
 
 public class TorchTest extends OrmTestCase {
     public static final String TAG = TorchTest.class.getSimpleName();
-    public static final String DATABASE_NAME = "torch.db";
+    public static final String DATABASE_NAME = "torch_main_database";
 
     Torch torch;
 
@@ -31,8 +31,8 @@ public class TorchTest extends OrmTestCase {
 
     @Override
     protected void tearDown() throws Exception {
-        super.tearDown();
         TorchService.forceUnload();
+        super.tearDown();
     }
 
     @Override

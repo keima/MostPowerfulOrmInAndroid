@@ -8,6 +8,8 @@ import info.quantumflux.model.annotation.Table;
 @Table
 public class Simple {
     @PrimaryKey
+    Long simpleId;
+
     public String stringValue;
     public Date dateValue;
 

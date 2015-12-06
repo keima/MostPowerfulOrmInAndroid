@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.pside.android.example.mostpowerfulorminandroid">
 
-    <application android:name="com.orm.SugarApp">
+    <application android:name=".MyApp">
         <meta-data
             android:name="DATABASE"
             android:value="sugarorm.db" />

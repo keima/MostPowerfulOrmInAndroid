@@ -1,12 +1,9 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
 
-import com.orm.SugarDb;
 import com.orm.SugarRecord;
 import com.orm.SugarTransactionHelper;
 
-import net.pside.android.example.mostpowerfulorminandroid.library.ApplicationOrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.IOrmTestCase;
 import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
 import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
@@ -14,12 +11,8 @@ import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
 import java.util.Date;
 import java.util.List;
 
-public class SugarOrmTest extends ApplicationOrmTestCase<SugarOrmApplication> {
+public class SugarOrmTest extends OrmTestCase {
     public static final String TAG = SugarOrmTest.class.getSimpleName();
-
-    public SugarOrmTest() {
-        super(SugarOrmApplication.class);
-    }
 
     public String getDatabaseName() {
         return "sugarorm.db";
@@ -28,13 +21,14 @@ public class SugarOrmTest extends ApplicationOrmTestCase<SugarOrmApplication> {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        createApplication();
+        Thread.sleep(500); // Application#onCreate()内のSugarORMのinitializeより先にテストケースが走ることがある・・・
     }
 
     @Override
     protected void tearDown() throws Exception {
-//        super.tearDown();
+        stopDatabaseCleanup = true;
         SugarRecord.deleteAll(Simple.class);
+        super.tearDown();
     }
 
     @Override
@@ -54,13 +48,13 @@ public class SugarOrmTest extends ApplicationOrmTestCase<SugarOrmApplication> {
             SugarTransactionHelper.doInTransaction(new SugarTransactionHelper.Callback() {
                 @Override
                 public void manipulateInTransaction() {
-                    for (int i = 1; i <= IOrmTestCase.NUMBER_OF_INSERT_SINGLE; i++) {
+                    for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
                         insertSingle(i);
                     }
                 }
             });
         } else {
-            for (int i = 1; i <= IOrmTestCase.NUMBER_OF_INSERT_SINGLE; i++) {
+            for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
                 insertSingle(i);
             }
         }

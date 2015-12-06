@@ -23,12 +23,12 @@ public class ShillelaghTest extends OrmTestCase {
 
     @Override
     public void testSingleInsert() {
-        insert(true);
+        insert(false);
     }
 
     @Override
     public void testSingleBulkInsert() {
-        insert(false);
+        insert(true);
     }
 
     private void insert(boolean isBulkMode) {

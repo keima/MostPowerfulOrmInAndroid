@@ -60,6 +60,8 @@ public class SlimrepoTest extends OrmTestCase {
             // ...?
         }
 
+        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+
         List<SimpleEntity> simpleEntities = null;
         try {
             simpleEntities = mRepoService.simples().query()
@@ -69,7 +71,6 @@ public class SlimrepoTest extends OrmTestCase {
         } catch (IOException e) {
             Log.e(TAG, "Catch!", e);
         }
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
 
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simpleEntities.size());
 
