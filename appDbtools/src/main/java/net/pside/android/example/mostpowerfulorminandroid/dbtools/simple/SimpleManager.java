@@ -1,7 +1,7 @@
 /*
  * SimpleManager.java
  *
- * Generated on: 12/02/2015 12:08:58
+ * Generated on: 12/06/2015 04:15:26
  *
  */
 
@@ -14,8 +14,11 @@ import android.app.Application;
 
 import net.pside.android.example.mostpowerfulorminandroid.DatabaseManager;
 
+@javax.inject.Singleton
 public class SimpleManager extends SimpleBaseManager {
 
+
+    @javax.inject.Inject
     public SimpleManager() {
         databaseManager = new DatabaseManager();
     }
@@ -23,6 +26,5 @@ public class SimpleManager extends SimpleBaseManager {
     public void setApplication(Application application) {
         databaseManager.setApplication(application);
     }
-
 
 }

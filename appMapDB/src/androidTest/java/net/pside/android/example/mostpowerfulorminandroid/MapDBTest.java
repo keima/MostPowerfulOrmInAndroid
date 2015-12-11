@@ -71,7 +71,7 @@ public class MapDBTest extends OrmTestCase {
         HTreeMap<Integer, Simple> simplesMap2 = db.getHashMap("simples");
         ArrayList<Simple> simples = new ArrayList<>();
         for (Map.Entry<Integer, Simple> entry : simplesMap2.entrySet()) {
-            if (entry.getKey() % 2 == 0)
+            if (entry.getValue().booleanValue)
                 simples.add(entry.getValue());
         }
         db.close();

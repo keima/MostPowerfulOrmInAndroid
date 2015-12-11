@@ -39,6 +39,7 @@ dependencies {
 
     compile 'org.codejargon.feather:feather:1.0'
     compile 'io.reactivex:rxjava:1.1.0'
+    compile 'joda-time:joda-time:2.9.1'
 
     compile 'org.dbtools:dbtools-android:4.1.2'
     compile 'org.dbtools:dbtools-query:2.5.6' // optional
@@ -50,11 +51,21 @@ dbtools {
     basePackageName android.defaultConfig.applicationId
     outputSrcDir 'appDbtools/src/main/java/net/pside/android/example/mostpowerfulorminandroid'
 
-    injectionSupport true // support for @Inject (using JEE, Dagger, Guice, etc)
-    jsr305Support true // support for @Notnull / @Nullable etc
-    includeDatabaseNameInPackage true
+    // support for @Inject (using JEE, Dagger, Guice, etc)
+    injectionSupport true
+
+    // support for @Notnull / @Nullable etc
+    jsr305Support true
+
     // place each set of domain objects into a package named after its database
-    eventBusSupport false // support Event Bus
-    dateTimeSupport false // support Joda DateTime
-    rxJavaSupport true // support RxJava
+    includeDatabaseNameInPackage true
+
+    // support Event Bus
+    eventBusSupport false
+
+    // support Joda DateTime
+    dateTimeSupport true
+
+    // support RxJava
+    rxJavaSupport true
 }

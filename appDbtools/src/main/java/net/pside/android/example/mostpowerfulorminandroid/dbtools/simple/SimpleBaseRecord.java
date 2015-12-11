@@ -10,9 +10,10 @@
 
 package net.pside.android.example.mostpowerfulorminandroid.dbtools.simple;
 
-import org.dbtools.android.domain.AndroidBaseRecord;
-import android.database.Cursor;
 import android.content.ContentValues;
+import android.database.Cursor;
+
+import org.dbtools.android.domain.AndroidBaseRecord;
 
 
 @SuppressWarnings("all")
@@ -28,9 +29,6 @@ public abstract class SimpleBaseRecord extends AndroidBaseRecord {
     public static final String C_STRING_VALUE = "STRING_VALUE";
     public static final String FULL_C_STRING_VALUE = "Simple.STRING_VALUE";
     private String stringValue = "";
-    public static final String C_DATE_VALUE = "DATE_VALUE";
-    public static final String FULL_C_DATE_VALUE = "Simple.DATE_VALUE";
-    private java.util.Date dateValue = null;
     public static final String C_BOOLEAN_VALUE = "BOOLEAN_VALUE";
     public static final String FULL_C_BOOLEAN_VALUE = "Simple.BOOLEAN_VALUE";
     private Boolean booleanValue = false;
@@ -52,7 +50,6 @@ public abstract class SimpleBaseRecord extends AndroidBaseRecord {
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS Simple (" + 
         "_id INTEGER PRIMARY KEY  AUTOINCREMENT," + 
         "STRING_VALUE TEXT," + 
-        "DATE_VALUE TEXT," + 
         "BOOLEAN_VALUE INTEGER," + 
         "SHORT_VALUE INTEGER," + 
         "INT_VALUE INTEGER," + 
@@ -66,7 +63,6 @@ public abstract class SimpleBaseRecord extends AndroidBaseRecord {
     public static final String[] ALL_KEYS = new String[] {
         C_ID,
         C_STRING_VALUE,
-        C_DATE_VALUE,
         C_BOOLEAN_VALUE,
         C_SHORT_VALUE,
         C_INT_VALUE,
@@ -98,10 +94,6 @@ public abstract class SimpleBaseRecord extends AndroidBaseRecord {
 
     public static String getStringValue(Cursor cursor) {
         return !cursor.isNull(cursor.getColumnIndexOrThrow(C_STRING_VALUE)) ? cursor.getString(cursor.getColumnIndexOrThrow(C_STRING_VALUE)) : null;
-    }
-
-    public static java.util.Date getDateValue(Cursor cursor) {
-        return dbStringToDate(cursor.getString(cursor.getColumnIndexOrThrow(C_DATE_VALUE)));
     }
 
     public static Boolean isBooleanValue(Cursor cursor) {
@@ -137,7 +129,6 @@ public abstract class SimpleBaseRecord extends AndroidBaseRecord {
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
         values.put(C_STRING_VALUE, stringValue);
-        values.put(C_DATE_VALUE, dateValue != null ? dateValue.getTime() : null);
         values.put(C_BOOLEAN_VALUE, booleanValue != null ? (booleanValue ? 1 : 0) : 0);
         values.put(C_SHORT_VALUE, shortValue);
         values.put(C_INT_VALUE, intValue);
@@ -152,7 +143,6 @@ public abstract class SimpleBaseRecord extends AndroidBaseRecord {
         Object[] values = new Object[]{
             id,
             stringValue,
-            dateValue != null ? dateValue.getTime() : null,
             booleanValue != null ? (booleanValue ? 1 : 0) : 0,
             shortValue,
             intValue,
@@ -165,7 +155,6 @@ public abstract class SimpleBaseRecord extends AndroidBaseRecord {
 
     public void setContent(ContentValues values) {
         stringValue = values.getAsString(C_STRING_VALUE);
-        dateValue = dbStringToDate(values.getAsString(C_DATE_VALUE));
         booleanValue = values.getAsBoolean(C_BOOLEAN_VALUE);
         shortValue = values.getAsInteger(C_SHORT_VALUE);
         intValue = values.getAsInteger(C_INT_VALUE);
@@ -178,7 +167,6 @@ public abstract class SimpleBaseRecord extends AndroidBaseRecord {
     public void setContent(Cursor cursor) {
         id = cursor.getLong(cursor.getColumnIndexOrThrow(C_ID));
         stringValue = !cursor.isNull(cursor.getColumnIndexOrThrow(C_STRING_VALUE)) ? cursor.getString(cursor.getColumnIndexOrThrow(C_STRING_VALUE)) : null;
-        dateValue = dbStringToDate(cursor.getString(cursor.getColumnIndexOrThrow(C_DATE_VALUE)));
         booleanValue = !cursor.isNull(cursor.getColumnIndexOrThrow(C_BOOLEAN_VALUE)) ? cursor.getInt(cursor.getColumnIndexOrThrow(C_BOOLEAN_VALUE)) != 0 ? true : false : null;
         shortValue = !cursor.isNull(cursor.getColumnIndexOrThrow(C_SHORT_VALUE)) ? cursor.getInt(cursor.getColumnIndexOrThrow(C_SHORT_VALUE)) : null;
         intValue = !cursor.isNull(cursor.getColumnIndexOrThrow(C_INT_VALUE)) ? cursor.getInt(cursor.getColumnIndexOrThrow(C_INT_VALUE)) : null;
@@ -206,23 +194,6 @@ public abstract class SimpleBaseRecord extends AndroidBaseRecord {
 
     public void setStringValue(@javax.annotation.Nullable String stringValue) {
         this.stringValue = stringValue;
-    }
-
-    @javax.annotation.Nullable
-    public java.util.Date getDateValue() {
-        if (dateValue != null) {
-            return (java.util.Date)dateValue.clone();
-        } else {
-            return null;
-        }
-    }
-
-    public void setDateValue(@javax.annotation.Nullable java.util.Date dateValue) {
-        if (dateValue != null) {
-            this.dateValue = (java.util.Date) dateValue.clone();
-        } else {
-            this.dateValue = null;
-        }
     }
 
     @javax.annotation.Nullable

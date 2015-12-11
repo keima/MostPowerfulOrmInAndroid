@@ -8,7 +8,7 @@
         <table name="Simple">
             <field name="_id" jdbcDataType="BIGINT" increment="true" primaryKey="true" notNull="true"/>
             <field name="STRING_VALUE" jdbcDataType="VARCHAR" size="255" />
-            <field name="DATE_VALUE" jdbcDataType="DATE" />
+            <!--<field name="DATE_VALUE" jdbcDataType="DATE" />-->
             <field name="BOOLEAN_VALUE" jdbcDataType="BOOLEAN" />
             <field name="SHORT_VALUE" jdbcDataType="SMALLINT" />
             <field name="INT_VALUE" jdbcDataType="INTEGER" />
