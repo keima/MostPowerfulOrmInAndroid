@@ -11,7 +11,7 @@ buildscript {
 
         classpath 'org.dbtools:gradle-dbtools-plugin:4.0.2'
 
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
     }
 }
 
@@ -39,6 +39,6 @@ project.ext {
     versionCode = 2
     versionName = "2015.1"
 
-    supportPackageVersion = '23.1.1'
+    supportPackageVersion = '24.2.1'
     playServicesVersion = '8.3.0'
 }
