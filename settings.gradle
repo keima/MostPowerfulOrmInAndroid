@@ -1,7 +1,6 @@
 include 'library'
 
 include 'appActiveandroid'
-include 'appCouchbase'
 include 'appDbflow'
 include 'appDbtools'
 include 'appGreendao', 'DaoGenerator'
