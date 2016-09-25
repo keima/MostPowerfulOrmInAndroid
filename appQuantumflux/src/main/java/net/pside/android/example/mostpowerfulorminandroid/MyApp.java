@@ -3,7 +3,7 @@ package net.pside.android.example.mostpowerfulorminandroid;
 import android.app.Application;
 import android.content.Context;
 
-import info.quantumflux.QuantumFlux;
+import me.himanshusoni.quantumflux.QuantumFlux;
 
 public class MyApp extends Application {
     @Override

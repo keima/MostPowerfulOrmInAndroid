@@ -21,7 +21,7 @@
         <!--android:value="true"/>-->
 
         <provider
-            android:name="info.quantumflux.provider.QuantumFluxContentProvider"
+            android:name="me.himanshusoni.quantumflux.provider.QuantumFluxContentProvider"
             android:authorities="${applicationId}"
             android:exported="false"/>
 

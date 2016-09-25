@@ -2,8 +2,9 @@ package net.pside.android.example.mostpowerfulorminandroid.model;
 
 import java.util.Date;
 
-import info.quantumflux.model.annotation.Column.PrimaryKey;
-import info.quantumflux.model.annotation.Table;
+import me.himanshusoni.quantumflux.model.annotation.Column.PrimaryKey;
+import me.himanshusoni.quantumflux.model.annotation.Table;
+
 
 @Table
 public class Simple {

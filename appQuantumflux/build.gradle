@@ -38,5 +38,5 @@ dependencies {
     compile "com.android.support:support-v4:${supportPackageVersion}"
 
     // input compile , provided or apt dependency here
-    compile 'info.quantumflux:library:0.9.1'
+    compile 'me.himanshusoni:quantum-flux:0.9.3'
 }
