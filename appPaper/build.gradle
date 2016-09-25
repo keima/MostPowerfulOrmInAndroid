@@ -38,6 +38,6 @@ dependencies {
     compile "com.android.support:support-v4:${supportPackageVersion}"
 
     // input compile , provided or apt dependency here
-    compile 'io.paperdb:paperdb:1.1'
+    compile 'io.paperdb:paperdb:1.5'
 
 }
