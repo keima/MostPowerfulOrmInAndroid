@@ -13,6 +13,9 @@ buildscript {
 
         // for appDbtools
         classpath 'org.dbtools:gradle-dbtools-plugin:7.0.11'
+
+        // for appRealm
+        classpath "io.realm:realm-gradle-plugin:1.1.0"
     }
 }
 
