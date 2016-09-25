@@ -32,12 +32,14 @@ android {
     }
 }
 
+def dbflow_version = "3.1.1"
+
 dependencies {
     compile project(":library")
     testCompile 'junit:junit:4.12'
     compile "com.android.support:support-v4:${supportPackageVersion}"
 
-    apt 'com.raizlabs.android:DBFlow-Compiler:2.2.1'
-    compile 'com.raizlabs.android:DBFlow-Core:2.2.1'
-    compile 'com.raizlabs.android:DBFlow:2.2.1'
+    apt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
 }
