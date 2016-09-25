@@ -9,9 +9,10 @@ buildscript {
 
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
 
-        classpath 'org.dbtools:gradle-dbtools-plugin:4.0.2'
-
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
+
+        // for appDbtools
+        classpath 'org.dbtools:gradle-dbtools-plugin:7.0.11'
     }
 }
 
