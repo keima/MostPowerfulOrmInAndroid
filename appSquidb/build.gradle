@@ -32,14 +32,16 @@ android {
     }
 }
 
+def squidb_version = "3.1.3"
+
 dependencies {
     compile project(":library")
     testCompile 'junit:junit:4.12'
     compile "com.android.support:support-v4:${supportPackageVersion}"
 
     // input compile , provided or apt dependency here
-    apt 'com.yahoo.squidb:squidb-processor:2.0.1'
-    compile 'com.yahoo.squidb:squidb:2.0.1'
-    compile 'com.yahoo.squidb:squidb-annotations:2.0.1'
+    apt "com.yahoo.squidb:squidb-processor:${squidb_version}"
+    compile "com.yahoo.squidb:squidb:${squidb_version}"
+    compile "com.yahoo.squidb:squidb-annotations:${squidb_version}"
 
 }
