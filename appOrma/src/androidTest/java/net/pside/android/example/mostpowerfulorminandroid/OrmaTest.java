@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.github.gfx.android.orma.AccessThreadConstraint;
 import com.github.gfx.android.orma.Inserter;
-import com.github.gfx.android.orma.TransactionTask;
 
 import net.pside.android.example.mostpowerfulorminandroid.library.IOrmTestCase;
 import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
@@ -37,7 +36,12 @@ public class OrmaTest extends OrmTestCase {
                 .writeOnMainThread(AccessThreadConstraint.NONE)
                 .trace(false)
                 .build();
-        db.getConnection().resetDatabase();
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        // rename database
+        super.tearDown();
     }
 
     @Override
@@ -54,9 +58,9 @@ public class OrmaTest extends OrmTestCase {
         TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
 
         if (isBulkMode) {
-            db.transactionSync(new TransactionTask() {
+            db.transactionSync(new Runnable() {
                 @Override
-                public void execute() throws Exception {
+                public void run() {
                     Inserter<Simple> inserter = db.prepareInsertIntoSimple();
                     for (int i = 1; i <= IOrmTestCase.NUMBER_OF_INSERT_SINGLE; i++) {
                         inserter.execute(createSimple(i));
