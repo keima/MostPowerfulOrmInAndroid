@@ -5,6 +5,11 @@ import java.util.Date;
 import io.realm.RealmObject;
 
 public class Simple extends RealmObject {
+    /*
+     NOTE: Causing Realm bug, not yet migrate public accessor instead of getter/setter.
+     @see: https://github.com/realm/realm-java/issues/2936
+     */
+
     private String stringValue;
     private Date dateValue;
 

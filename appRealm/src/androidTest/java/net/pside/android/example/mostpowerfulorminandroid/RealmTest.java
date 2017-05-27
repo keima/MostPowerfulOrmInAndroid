@@ -28,7 +28,8 @@ public class RealmTest extends OrmTestCase {
     public void setUp() throws Exception {
         super.setUp();
 
-        RealmConfiguration conf = new RealmConfiguration.Builder(mContext)
+        Realm.init(getContext());
+        RealmConfiguration conf = new RealmConfiguration.Builder()
                 .name(DATABASE_NAME)
                 .build();
 
@@ -39,7 +40,7 @@ public class RealmTest extends OrmTestCase {
     protected void tearDown() throws Exception {
         super.tearDown();
         mRealm.beginTransaction();
-        mRealm.clear(Simple.class);
+        mRealm.delete(Simple.class);
         mRealm.commitTransaction();
     }
 
@@ -65,15 +66,7 @@ public class RealmTest extends OrmTestCase {
                 mRealm.beginTransaction();
             }
 
-            Simple simple = mRealm.createObject(Simple.class);
-            simple.setStringValue("TestData" + i);
-            simple.setDateValue(new Date(i * 1000));
-            simple.setBooleanValue(i % 2 == 0);
-            simple.setShortValue((short) i);
-            simple.setIntValue(i);
-            simple.setLongValue((long) i);
-            simple.setFloatValue((float) i);
-            simple.setDoubleValue((double) i);
+            createSimple(i);
 
             if (!isBulkMode) {
                 mRealm.commitTransaction();
@@ -101,5 +94,18 @@ public class RealmTest extends OrmTestCase {
 
         logger.addSplit("Manual Import!");
         logger.dumpToLog();
+    }
+
+    private Simple createSimple(int i) {
+        Simple simple = mRealm.createObject(Simple.class);
+        simple.setStringValue("TestData" + i);
+        simple.setDateValue(new Date(i * 1000));
+        simple.setBooleanValue(i % 2 == 0);
+        simple.setShortValue((short) i);
+        simple.setIntValue(i);
+        simple.setLongValue((long) i);
+        simple.setFloatValue((float) i);
+        simple.setDoubleValue((double) i);
+        return simple;
     }
 }
