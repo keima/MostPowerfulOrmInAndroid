@@ -13,13 +13,13 @@
 
 ## Available Production Flavors
 
-- connectedAndroidTest<u>Ormlite</u>Debug
-- connectedAndroidTest<u>Activeandroid</u>Debug
-- connectedAndroidTest<u>Greendao</u>Debug
-- connectedAndroidTest<u>Sugarorm</u>Debug
-- connectedAndroidTest<u>Dbflow</u>Debug
-- connectedAndroidTest<u>Realm</u>Debug
-- connectedAndroidTest<u>Couchbase</u>Debug
+- <u>appOrmlite</u>:connectedDebugAndroidTest
+- <u>appActiveandroid</u>:connectedDebugAndroidTest
+- <u>appGreendao</u>:connectedDebugAndroidTest
+- <u>appSugarorm</u>:connectedDebugAndroidTest
+- <u>appDbflow</u>:connectedDebugAndroidTest
+- <u>appRealm</u>:connectedDebugAndroidTest
+- <u>appCouchbase</u>:connectedDebugAndroidTest
 
 # License
 
