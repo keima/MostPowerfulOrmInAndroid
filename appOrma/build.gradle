@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -37,7 +36,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile "com.android.support:support-v4:${supportPackageVersion}"
 
-    apt 'com.github.gfx.android.orma:orma-processor:3.0.1'
+    annotationProcessor 'com.github.gfx.android.orma:orma-processor:3.0.1'
     compile 'com.github.gfx.android.orma:orma:3.0.1'
 
 }

@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -39,8 +38,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile "com.android.support:support-v4:${supportPackageVersion}"
 
-    // input compile , provided or apt dependency here
-    apt "com.yahoo.squidb:squidb-processor:${squidb_version}"
+    // input compile , provided or annotationProcessor dependency here
+    annotationProcessor "com.yahoo.squidb:squidb-processor:${squidb_version}"
     compile "com.yahoo.squidb:squidb:${squidb_version}"
     compile "com.yahoo.squidb:squidb-annotations:${squidb_version}"
 
