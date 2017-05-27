@@ -22,6 +22,7 @@ allprojects {
     repositories {
         mavenCentral()
         jcenter()
+        maven { url 'https://maven.google.com' }
         maven { url "http://maven.rushorm.com" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://www.jitpack.io" }
