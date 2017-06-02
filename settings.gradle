@@ -7,20 +7,20 @@ include 'appGreendao', 'DaoGenerator'
 include 'appOrma'
 include 'appOrmlite'
 include 'appRealm'
-include 'appShillelagh'
+//include 'appShillelagh' // released this on 1 Dec 2014
 include 'appSugarorm'
 include 'appOllie'
-include 'appTorch'
+//include 'appTorch' // released this on 25 Nov 2014
 include 'appCupboard'
 include 'appSlimrepo'
 include 'appRushorm'
 include 'appSquidb'
-include 'appEasyliteORM'
-include 'appTriORM'
+//include 'appEasyliteORM' // released this on 8 Nov 2015
+//include 'appTriORM' // inactive development : committed on 22 Feb 2016
 include 'appQuantumflux'
 include 'appCPOrm'
-include 'appSnappyDB'
+//include 'appSnappyDB' // (Jun 09, 2015)
 include 'appMapDB'
 include 'appPaper'
-include 'appSabres'
+//include 'appSabres' // Version 0.9.18 (17-11-2015)
 include 'appRoom'
