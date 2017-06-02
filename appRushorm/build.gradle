@@ -37,6 +37,6 @@ dependencies {
     compile "com.android.support:support-v4:${supportPackageVersion}"
 
     // input compile , provided or annotationProcessor dependency here
-    compile 'co.uk.rushorm:rushandroid:1.2.0'
+    compile 'co.uk.rushorm:rushandroid:1.3.0'
 
 }
