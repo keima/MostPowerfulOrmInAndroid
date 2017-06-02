@@ -41,8 +41,7 @@ dependencies {
     compile 'io.reactivex:rxjava:1.2.0'
     compile 'joda-time:joda-time:2.9.4'
 
-    compile 'org.dbtools:dbtools-android:7.0.11'
-    compile 'org.dbtools:dbtools-query:3.0.0' // optional
+    compile 'org.dbtools:dbtools-android:9.0.0'
 }
 
 dbtools {
