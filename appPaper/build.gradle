@@ -37,6 +37,6 @@ dependencies {
     compile "com.android.support:support-v4:${supportPackageVersion}"
 
     // input compile , provided or annotationProcessor dependency here
-    compile 'io.paperdb:paperdb:1.5'
+    compile 'io.paperdb:paperdb:2.0'
 
 }
