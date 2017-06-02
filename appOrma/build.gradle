@@ -31,12 +31,16 @@ android {
     }
 }
 
+ext {
+    ormaVersion = "4.2.5"
+}
+
 dependencies {
     compile project(":library")
     testCompile 'junit:junit:4.12'
     compile "com.android.support:support-v4:${supportPackageVersion}"
 
-    annotationProcessor 'com.github.gfx.android.orma:orma-processor:3.0.1'
-    compile 'com.github.gfx.android.orma:orma:3.0.1'
+    annotationProcessor "com.github.gfx.android.orma:orma-processor:$ormaVersion"
+    compile "com.github.gfx.android.orma:orma:$ormaVersion"
 
 }
