@@ -37,6 +37,6 @@ dependencies {
     compile "com.android.support:support-v4:${supportPackageVersion}"
 
     // input compile , provided or annotationProcessor dependency here
-    compile 'org.mapdb:mapdb:3.0.2'
+    compile 'org.mapdb:mapdb:3.0.4'
 
 }
