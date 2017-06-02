@@ -37,6 +37,6 @@ dependencies {
     compile "com.android.support:support-v4:${supportPackageVersion}"
 
     // input compile , provided or annotationProcessor dependency here
-    compile 'za.co.cporm:CPOrm:3.0.7'
+    compile 'za.co.cporm:CPOrm:3.0.9'
 
 }
