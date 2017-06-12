@@ -9,7 +9,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import java.util.Date;
 
-@Table(databaseName = SimpleDatabase.NAME)
+@Table(database = SimpleDatabase.class)
 public class Simple extends BaseModel {
     @Column(name = BaseColumns._ID)
     @PrimaryKey(autoincrement = true)
