@@ -1,7 +1,7 @@
 /*
  * Simple.java
  *
- * Created: 12/06/2015 04:15:26
+ * Created: 06/15/2017 01:23:38
  */
 
 
@@ -9,22 +9,11 @@
 package net.pside.android.example.mostpowerfulorminandroid.dbtools.simple;
 
 import android.database.Cursor;
-import android.content.ContentValues;
+import org.dbtools.android.domain.database.contentvalues.DBToolsContentValues;
 
 
 public class Simple extends SimpleBaseRecord {
 
-
-    public Simple(Cursor cursor) {
-        setContent(cursor);
-    }
-
-    public Simple(ContentValues values) {
-        setContent(values);
-    }
-
-    public Simple() {
-    }
 
 
 }

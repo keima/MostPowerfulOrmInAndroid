@@ -3,21 +3,24 @@ package net.pside.android.example.mostpowerfulorminandroid;
 import android.app.Application;
 
 import net.pside.android.example.mostpowerfulorminandroid.dbtools.simple.Simple;
+import net.pside.android.example.mostpowerfulorminandroid.dbtools.simple.SimpleConst;
 import net.pside.android.example.mostpowerfulorminandroid.dbtools.simple.SimpleManager;
+import net.pside.android.example.mostpowerfulorminandroid.di.MyModule;
 import net.pside.android.example.mostpowerfulorminandroid.library.ApplicationOrmTestCase;
 import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
 
 import org.codejargon.feather.Feather;
+import org.joda.time.DateTime;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 public class DbToolsTest extends ApplicationOrmTestCase<Application> {
-    private static final String TAG = DbToolsTest.class.getSimpleName();
+    public static final String TAG = DbToolsTest.class.getSimpleName();
 
     @Inject
-    SimpleManager mSimpleManager;
+    private SimpleManager mSimpleManager;
 
     public DbToolsTest() {
         super(Application.class);
@@ -27,16 +30,12 @@ public class DbToolsTest extends ApplicationOrmTestCase<Application> {
     protected void setUp() throws Exception {
         super.setUp();
         createApplication();
-
-        Feather feather = Feather.with();
-        feather.injectFields(this);
-        Application application = getApplication();
-        mSimpleManager.setApplication(application);
+        Feather.with(new MyModule(getApplication())).injectFields(this);
     }
 
     @Override
     public String getDatabaseName() {
-        return DatabaseManager.DBTOOLS_DATABASE_NAME;
+        return DatabaseManagerConst.DBTOOLS_DATABASE_NAME;
     }
 
     @Override
@@ -50,7 +49,8 @@ public class DbToolsTest extends ApplicationOrmTestCase<Application> {
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, isBulkMode ? MSG_LOGGER_INITIALIZE_BULK_ON : MSG_LOGGER_INITIALIZE_BULK_OFF);
+        TimingLogger logger = new TimingLogger(TAG,
+                "Insert on " + "DbToolsTest".toUpperCase() + " (BulkMode:" + (isBulkMode ? "ON" : "OFF") + ")");
 
         if (isBulkMode) {
             mSimpleManager.beginTransaction();
@@ -59,7 +59,7 @@ public class DbToolsTest extends ApplicationOrmTestCase<Application> {
         for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
             Simple simple = new Simple();
             simple.setStringValue("TestData" + i);
-//            simple.setDateValue(new DateTime(i * 1000));
+            simple.setDateValue(new DateTime(i * 1000));
             simple.setBooleanValue(i % 2 == 0);
             simple.setShortValue(i);
             simple.setIntValue(i);
@@ -75,7 +75,7 @@ public class DbToolsTest extends ApplicationOrmTestCase<Application> {
 
         logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
 
-        List<Simple> simples = mSimpleManager.findAllBySelection(Simple.C_BOOLEAN_VALUE + " = ?", new String[]{"1"});
+        List<Simple> simples = mSimpleManager.findAllBySelection(SimpleConst.C_BOOLEAN_VALUE + " = ?", new String[]{"1"});
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
         logger.addSplit(MSG_LOGGER_SPLIT_SELECT);

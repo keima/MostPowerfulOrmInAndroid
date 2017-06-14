@@ -48,7 +48,7 @@ dbtools {
     type 'ANDROID'
 
     basePackageName android.defaultConfig.applicationId
-    outputSrcDir 'appDbtools/src/main/java/net/pside/android/example/mostpowerfulorminandroid'
+    outputSrcDir 'src/main/java/net/pside/android/example/mostpowerfulorminandroid'
 
     // support for @Inject (using JEE, Dagger, Guice, etc)
     injectionSupport true
@@ -62,5 +62,5 @@ dbtools {
     dateType 'JODA' // DATE, JSR-310, JODA
 
     // support RxJava
-    rxJavaSupport true
+    rxJavaSupport false
 }
