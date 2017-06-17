@@ -2,13 +2,17 @@ package net.pside.android.example.mostpowerfulorminandroid.model;
 
 import android.content.Context;
 
+import com.yahoo.squidb.android.AndroidOpenHelper;
+import com.yahoo.squidb.data.ISQLiteDatabase;
+import com.yahoo.squidb.data.ISQLiteOpenHelper;
 import com.yahoo.squidb.data.SquidDatabase;
-import com.yahoo.squidb.data.adapter.SQLiteDatabaseWrapper;
 import com.yahoo.squidb.sql.Table;
 
 public class SimpleDatabase extends SquidDatabase {
     public static final String DB_NAME = "squi.db";
     public static final int DB_VERSION = 1;
+
+    private final Context context;
 
     /**
      * Create a new SquidDatabase
@@ -16,7 +20,7 @@ public class SimpleDatabase extends SquidDatabase {
      * @param context the Context, must not be null
      */
     public SimpleDatabase(Context context) {
-        super(context);
+        this.context = context;
     }
 
     @Override
@@ -37,7 +41,12 @@ public class SimpleDatabase extends SquidDatabase {
     }
 
     @Override
-    protected boolean onUpgrade(SQLiteDatabaseWrapper db, int oldVersion, int newVersion) {
+    protected ISQLiteOpenHelper createOpenHelper(String databaseName, OpenHelperDelegate delegate, int version) {
+        return new AndroidOpenHelper(context, databaseName, delegate, version);
+    }
+
+    @Override
+    protected boolean onUpgrade(ISQLiteDatabase db, int oldVersion, int newVersion) {
         return false;
     }
 }
