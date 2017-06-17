@@ -2,6 +2,7 @@ package net.pside.android.example.mostpowerfulorminandroid;
 
 import android.util.Log;
 
+import com.slimgears.slimrepo.core.interfaces.RepositoryService;
 import com.slimgears.slimrepo.core.interfaces.conditions.Conditions;
 
 import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
@@ -32,45 +33,43 @@ public class SlimrepoTest extends OrmTestCase {
     }
 
     @Override
-    public void testSingleInsert() {
+    public void testSingleInsert() throws IOException {
         insert(false);
     }
 
     @Override
-    public void testSingleBulkInsert() {
-//        insert(true);
+    public void testSingleBulkInsert() throws IOException {
+        insert(true);
     }
 
-    private void insert(boolean isBulkMode) {
+    private void insert(boolean isBulkMode) throws IOException {
         TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
 
         if (isBulkMode) {
-            // ...?
-        }
-
-        for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
-            try {
-                mRepoService.simples().add(createSimple(i));
-            } catch (IOException e) {
-                Log.e(TAG, "Catch!", e);
+            mRepoService.update(new RepositoryService.UpdateAction<SimpleRepository>() {
+                @Override
+                public void execute(SimpleRepository repository) throws IOException {
+                    for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
+                        repository.simples().add(createSimple(i));
+                    }
+                }
+            });
+        } else {
+            for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
+                try {
+                    mRepoService.simples().add(createSimple(i));
+                } catch (IOException e) {
+                    Log.e(TAG, "Catch!", e);
+                }
             }
-        }
-
-        if (isBulkMode) {
-            // ...?
         }
 
         logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
 
-        List<SimpleEntity> simpleEntities = null;
-        try {
-            simpleEntities = mRepoService.simples().query()
-                    .where(Conditions.equals(SimpleEntity.BooleanValue, 1))
-                    .prepare()
-                    .toList();
-        } catch (IOException e) {
-            Log.e(TAG, "Catch!", e);
-        }
+        List<SimpleEntity> simpleEntities = mRepoService.simples().query()
+                .where(Conditions.equals(SimpleEntity.BooleanValue, 1))
+                .prepare()
+                .toList();
 
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simpleEntities.size());
 
