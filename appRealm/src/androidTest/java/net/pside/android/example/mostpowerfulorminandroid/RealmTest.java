@@ -86,10 +86,7 @@ public class RealmTest extends OrmTestCase {
 
         logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
 
-        List<Simple> simpleList = new ArrayList<>();
-        for (Simple simple : simples) {
-            simpleList.add(simple);
-        }
+        List<Simple> simpleList = mRealm.copyFromRealm(simples);
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simpleList.size());
 
         logger.addSplit("Manual Import!");
