@@ -6,10 +6,11 @@ android {
 
     defaultConfig {
         applicationId rootProject.ext.applicationId
-        minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion 24
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -23,11 +24,13 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/README'
         exclude 'META-INF/NOTICE'
+        exclude 'LICENSE-EDL-1.0.txt'
+        exclude 'LICENSE-EPL-1.0.txt'
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -35,6 +38,7 @@ dependencies {
     compile project(":library")
     testCompile 'junit:junit:4.12'
     compile "com.android.support:support-v4:${supportPackageVersion}"
+
 
     // input compile , provided or annotationProcessor dependency here
     compile 'org.mapdb:mapdb:3.0.4'

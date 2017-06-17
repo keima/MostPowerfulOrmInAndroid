@@ -7,6 +7,7 @@ import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.mapdb.HTreeMap;
+import org.mapdb.Serializer;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,40 +24,32 @@ public class MapDBTest extends OrmTestCase {
     }
 
     @Override
-    public void setUp() throws Exception {
-        super.setUp();
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
-
-    @Override
     public void testSingleInsert() {
         insert(false);
     }
 
     @Override
     public void testSingleBulkInsert() {
-//        insert(true);
+        insert(true);
     }
 
     private void insert(boolean isBulkMode) {
         TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
 
-        DBMaker dbMaker = DBMaker.newTempFileDB()
+        DBMaker.Maker dbMaker = DBMaker.tempFileDB()
                 .closeOnJvmShutdown()
-                .deleteFilesAfterClose();
+                .fileDeleteAfterClose();
 
         if (isBulkMode) {
-            dbMaker.transactionDisable();
+            dbMaker.transactionEnable();
         }
 
         db = dbMaker.make();
 
-
-        HTreeMap<Integer, Simple> simplesMap = db.createHashMap("simples").make();
+        HTreeMap<Integer, Simple> simplesMap = db.hashMap("simples")
+                .keySerializer(Serializer.INTEGER)
+                .valueSerializer(Serializer.JAVA)
+                .createOrOpen();
 
         if (isBulkMode) {
         }
@@ -68,11 +61,18 @@ public class MapDBTest extends OrmTestCase {
 
         logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
 
-        HTreeMap<Integer, Simple> simplesMap2 = db.getHashMap("simples");
+        HTreeMap<Integer, Simple> simplesMap2 = db.hashMap("simples")
+                .keySerializer(Serializer.INTEGER)
+                .valueSerializer(Serializer.JAVA)
+                .open();
         ArrayList<Simple> simples = new ArrayList<>();
-        for (Map.Entry<Integer, Simple> entry : simplesMap2.entrySet()) {
-            if (entry.getValue().booleanValue)
-                simples.add(entry.getValue());
+        for (Object object : simplesMap2.entrySet()) {
+            if (object instanceof Map.Entry) {
+                Map.Entry<Integer, Simple> entry = (Map.Entry<Integer, Simple>) object;
+                if (entry.getValue().booleanValue) {
+                    simples.add(entry.getValue());
+                }
+            }
         }
         db.close();
 
