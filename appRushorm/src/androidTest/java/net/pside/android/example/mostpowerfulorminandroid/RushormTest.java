@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import co.uk.rushorm.android.RushAndroid;
+import co.uk.rushorm.core.Rush;
 import co.uk.rushorm.core.RushCore;
 import co.uk.rushorm.core.RushSearch;
 
@@ -33,11 +34,15 @@ public class RushormTest extends ApplicationOrmTestCase<Application> {
         super.setUp();
 
         getContext().deleteDatabase(DATABASE_NAME);
-        RushAndroid.initialize(getContext());
+
+        List<Class<? extends Rush>> classes = new ArrayList<>();
+        classes.add(SetupObject.class);
+        classes.add(Simple.class);
+        RushAndroid.initialize(getContext(), classes);
+
         // Saving this object makes setUp wait until initialize finishes
         // otherwise it seems that the thread initialize is done on gets killed
         new SetupObject().save();
-
     }
 
     @Override

@@ -3,7 +3,7 @@
     package="net.pside.android.example.mostpowerfulorminandroid"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application android:name=".MyApp">
+    <application>
         <!-- Updating this will cause a database upgrade -->
         <meta-data
             android:name="Rush_db_version"
