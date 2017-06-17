@@ -36,6 +36,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile "com.android.support:support-v4:${supportPackageVersion}"
 
-    provided 'com.michaelpardo:ollie-compiler:0.3.2-SNAPSHOT'
+    annotationProcessor 'com.michaelpardo:ollie-compiler:0.3.2-SNAPSHOT'
     compile 'com.michaelpardo:ollie:0.3.2-SNAPSHOT'
 }
