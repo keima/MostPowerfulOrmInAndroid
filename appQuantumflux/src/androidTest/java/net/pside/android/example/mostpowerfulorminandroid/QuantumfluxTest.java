@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import info.quantumflux.QuantumFlux;
-import info.quantumflux.model.query.Select;
+import me.himanshusoni.quantumflux.QuantumFlux;
+import me.himanshusoni.quantumflux.model.query.Select;
 
 public class QuantumfluxTest extends OrmTestCase {
     public static final String TAG = QuantumfluxTest.class.getSimpleName();
