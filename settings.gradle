@@ -26,3 +26,4 @@ include 'appPaper'
 include 'appRoom'
 
 include 'appAndroidORM'
+include 'appElectra'
