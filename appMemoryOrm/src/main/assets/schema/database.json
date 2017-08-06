@@ -1,0 +1,52 @@
+{
+  "tables": [
+    {
+      "name": "Simple",
+      "columns": [
+        {
+          "label": "intValue",
+          "type": "integer",
+          "primary": true
+        },
+        {
+          "label": "stringValue",
+          "type": "text"
+        },
+        {
+          "label": "dateValue",
+          "type": "integer"
+        },
+        {
+          "label": "booleanValue",
+          "type": "integer"
+        },
+        {
+          "label": "shortValue",
+          "type": "integer"
+        },
+        {
+          "label": "intValue",
+          "type": "integer"
+        },
+        {
+          "label": "longValue",
+          "type": "integer"
+        },
+        {
+          "label": "floatValue",
+          "type": "integer" //?
+        },
+        {
+          "label": "doubleValue",
+          "type": "integer" // ?
+        }
+      ]
+    }
+  ]
+}
+
+// "label": "id",
+// "type": "",
+// "primary": true
+
+// type: text, integer

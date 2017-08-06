@@ -26,5 +26,6 @@ include 'appPaper'
 include 'appRoom'
 
 include 'appAndroidORM'
+include 'appMemoryOrm'
 include 'appElectra'
 include 'appFreezer'
