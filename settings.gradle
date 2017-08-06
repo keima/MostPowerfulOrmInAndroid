@@ -27,3 +27,4 @@ include 'appRoom'
 
 include 'appAndroidORM'
 include 'appElectra'
+include 'appFreezer'
