@@ -24,3 +24,5 @@ include 'appCPOrm'
 include 'appPaper'
 //include 'appSabres' // Version 0.9.18 (17-11-2015)
 include 'appRoom'
+
+include 'appAndroidORM'
