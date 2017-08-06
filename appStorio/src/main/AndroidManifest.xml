@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="net.pside.android.example.mostpowerfulorminandroid">
+
+    <application android:name="android.app.Application">
+
+        <provider
+            android:name=".MyContentProvider"
+            android:authorities="${applicationId}"
+            android:exported="false" />
+
+    </application>
+
+</manifest>

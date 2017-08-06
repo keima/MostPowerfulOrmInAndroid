@@ -1,0 +1,51 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId rootProject.ext.applicationId
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/README'
+        exclude 'META-INF/NOTICE'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+dependencies {
+    compile project(":library")
+    testCompile 'junit:junit:4.12'
+    compile "com.android.support:support-v4:${supportPackageVersion}"
+
+    def storioVersion = "1.13.0"
+
+    // input compile , provided or annotationProcessor dependency here
+    compile "com.pushtorefresh.storio:sqlite:$storioVersion"
+    compile "com.pushtorefresh.storio:content-resolver:$storioVersion"
+
+    compile "com.pushtorefresh.storio:sqlite-annotations:$storioVersion"
+    annotationProcessor "com.pushtorefresh.storio:sqlite-annotations-processor:$storioVersion"
+
+    compile "com.pushtorefresh.storio:content-resolver-annotations:$storioVersion"
+    annotationProcessor "com.pushtorefresh.storio:content-resolver-annotations-processor:$storioVersion"
+
+}
