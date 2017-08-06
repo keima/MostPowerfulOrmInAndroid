@@ -1,3 +1,12 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.dbtools:gradle-dbtools-plugin:9.0.0'
+    }
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'dbtools'
 
