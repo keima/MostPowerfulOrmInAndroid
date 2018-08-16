@@ -12,7 +12,6 @@ apply plugin: 'com.siimkinks.sqlitemagic'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId rootProject.ext.applicationId

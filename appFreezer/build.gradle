@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId rootProject.ext.applicationId
@@ -40,6 +39,6 @@ dependencies {
 
     // input compile , provided or annotationProcessor dependency here
     compile "fr.xebia.android.freezer:freezer:$freezerVersion"
-    provided "fr.xebia.android.freezer:freezer-annotations:$freezerVersion"
+    compileOnly "fr.xebia.android.freezer:freezer-annotations:$freezerVersion"
     annotationProcessor "fr.xebia.android.freezer:freezer-compiler:$freezerVersion"
 }

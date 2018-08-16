@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId rootProject.ext.applicationId
@@ -36,7 +35,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile "com.android.support:support-v4:${supportPackageVersion}"
 
-    provided 'com.andrewreitz:shillelagh-processor:0.5.0'
+    compileOnly 'com.andrewreitz:shillelagh-processor:0.5.0'
     compile 'com.andrewreitz:shillelagh:0.5.0'
 
 }
