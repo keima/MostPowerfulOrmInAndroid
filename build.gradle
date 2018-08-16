@@ -2,21 +2,21 @@ apply plugin: 'com.github.ben-manes.versions'
 
 buildscript {
     repositories {
-        maven { url 'https://maven.google.com' }
+        google()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha9'
+        classpath 'com.android.tools.build:gradle:3.2.0-beta05'
 
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.14.0'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
     }
 }
 
 allprojects {
     repositories {
+        google()
         mavenCentral()
         jcenter()
-        maven { url 'https://maven.google.com' }
         maven { url "http://maven.rushorm.com" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://www.jitpack.io" }
