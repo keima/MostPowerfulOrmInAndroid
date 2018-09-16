@@ -1,35 +1,45 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
-import android.support.annotation.NonNull;
-
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
 import com.activeandroid.query.Select;
 
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 
 import java.util.Date;
 import java.util.List;
 
-public class ActiveAndroidTest extends OrmTestCase {
-    public static final String TAG = ActiveAndroidTest.class.getSimpleName();
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
 
-    public static final String DATABASE_NAME = "ActiveAndroid.db";
-    public static final int DATABASE_VERSION = 1;
+@RunWith(AndroidJUnit4.class)
+public class ActiveAndroidTest {
 
-    @NonNull
-    @Override
-    public String getDatabaseName() {
-        return DATABASE_NAME;
-    }
+    private static final String DATABASE_NAME = "ActiveAndroid.db";
+    private static final int DATABASE_VERSION = 1;
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
 
-        Configuration config = new Configuration.Builder(mContext)
+    @Before
+    public void setUp() {
+        Configuration config = new Configuration.Builder(
+                InstrumentationRegistry.getTargetContext()
+        )
                 .setDatabaseName(DATABASE_NAME)
                 .setDatabaseVersion(DATABASE_VERSION)
                 .addModelClass(Simple.class)
@@ -37,18 +47,20 @@ public class ActiveAndroidTest extends OrmTestCase {
         ActiveAndroid.initialize(config);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
             ActiveAndroid.beginTransaction();
@@ -73,20 +85,18 @@ public class ActiveAndroidTest extends OrmTestCase {
             ActiveAndroid.endTransaction();
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         List<Simple> simpleList = new Select().from(Simple.class)
                 .where("booleanValue = ?", true)
                 .execute();
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simpleList.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
-    @Override
-    public void tearDown() throws Exception {
+    @After
+    public void tearDown() {
         ActiveAndroid.dispose();
-        super.tearDown();
     }
 }
