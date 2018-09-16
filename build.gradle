@@ -6,7 +6,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0-rc02'
+        classpath 'com.android.tools.build:gradle:3.2.0-rc03'
 
         classpath 'com.github.ben-manes:gradle-versions-plugin:0.20.0'
     }
@@ -28,15 +28,14 @@ task clean(type: Delete) {
 }
 
 project.ext {
-    compileSdkVersion = 25
+    compileSdkVersion = 28
 
     applicationId = "net.pside.android.example.mostpowerfulorminandroid"
 
     minSdkVersion = 15
-    targetSdkVersion = 25
+    targetSdkVersion = 28
     versionCode = 2
     versionName = "2015.1"
 
-    supportPackageVersion = '25.3.1'
-    playServicesVersion = '8.3.0'
+    supportPackageVersion = '28.0.0-rc02'
 }
