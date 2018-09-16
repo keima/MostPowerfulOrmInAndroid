@@ -9,6 +9,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -31,14 +33,16 @@ android {
 }
 
 dependencies {
-    compile project(":library")
-    testCompile 'junit:junit:4.12'
-    compile "com.android.support:support-v4:${supportPackageVersion}"
+    implementation project(":library")
+    implementation "com.android.support:support-v4:${supportPackageVersion}"
 
     // input compile , provided or annotationProcessor dependency here
     def roomVersion = '1.1.1'
-    compile "android.arch.persistence.room:runtime:${roomVersion}"
+    implementation "android.arch.persistence.room:runtime:${roomVersion}"
     annotationProcessor "android.arch.persistence.room:compiler:${roomVersion}"
-    testCompile "android.arch.persistence.room:testing:${roomVersion}"
-    compile "android.arch.persistence.room:rxjava2:${roomVersion}"
+    testImplementation "android.arch.persistence.room:testing:${roomVersion}"
+    implementation "android.arch.persistence.room:rxjava2:${roomVersion}"
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 }

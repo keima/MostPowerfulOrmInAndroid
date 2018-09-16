@@ -1,46 +1,58 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
 import android.arch.persistence.room.Room;
-
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.AppDatabase;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Date;
 import java.util.List;
 
-public class RoomTest extends OrmTestCase {
-    public static final String TAG = RoomTest.class.getSimpleName();
-    public static final String DATABASE_NAME = "room.db";
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
+
+@RunWith(AndroidJUnit4.class)
+public class RoomTest {
+    private static final String DATABASE_NAME = "room.db";
+
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
 
     private AppDatabase db;
 
-    @Override
-    public String getDatabaseName() {
-        return DATABASE_NAME;
+    @Before
+    public void setUp() {
+        db = Room.databaseBuilder(
+                InstrumentationRegistry.getTargetContext(),
+                AppDatabase.class,
+                DATABASE_NAME
+        ).build();
     }
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-
-        db = Room.databaseBuilder(getContext(), AppDatabase.class, DATABASE_NAME)
-                .build();
-    }
-
-    @Override
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
             db.beginTransaction();
@@ -56,14 +68,13 @@ public class RoomTest extends OrmTestCase {
             db.endTransaction();
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         List<Simple> simples = db.simpleDao().getAllByBooleanValue(true);
 
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private Simple createSimple(int i) {
