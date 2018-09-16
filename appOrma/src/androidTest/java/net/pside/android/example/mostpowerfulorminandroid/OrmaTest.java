@@ -1,36 +1,41 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
-import android.support.annotation.NonNull;
-
 import com.github.gfx.android.orma.AccessThreadConstraint;
 import com.github.gfx.android.orma.Inserter;
 
-import net.pside.android.example.mostpowerfulorminandroid.library.IOrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
-import net.pside.android.example.mostpowerfulorminandroid.model.OrmaDatabase;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 
 import java.util.Date;
 import java.util.List;
 
-public class OrmaTest extends OrmTestCase {
-    public static final String TAG = OrmaTest.class.getSimpleName();
+import static org.junit.Assert.assertEquals;
 
-    OrmaDatabase db;
+@RunWith(AndroidJUnit4.class)
+public class OrmaTest {
+    private static final String DB_NAME = "orma.db";
 
-    @NonNull
-    @Override
-    public String getDatabaseName() {
-        return "orma.db";
-    }
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DB_NAME
+    );
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
+    private OrmaDatabase db;
 
-        db = OrmaDatabase.builder(getContext())
-                .name(getDatabaseName())
+    @Before
+    public void setUp() {
+        db = OrmaDatabase.builder(InstrumentationRegistry.getTargetContext())
+                .name(DB_NAME)
                 .writeAheadLogging(false)
                 .readOnMainThread(AccessThreadConstraint.NONE)
                 .writeOnMainThread(AccessThreadConstraint.NONE)
@@ -38,51 +43,46 @@ public class OrmaTest extends OrmTestCase {
                 .build();
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        // rename database
-        super.tearDown();
-    }
-
-    @Override
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     public void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
             db.transactionSync(new Runnable() {
                 @Override
                 public void run() {
                     Inserter<Simple> inserter = db.prepareInsertIntoSimple();
-                    for (int i = 1; i <= IOrmTestCase.NUMBER_OF_INSERT_SINGLE; i++) {
+                    for (int i = 1; i <= OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE; i++) {
                         inserter.execute(createSimple(i));
                     }
                 }
             });
         } else {
-            for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
+            for (int i = 1; i <= OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE; i++) {
                 db.insertIntoSimple(createSimple(i));
             }
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         List<Simple> simpleList = db.selectFromSimple()
                 .where("booleanValue = ?", true)
                 .toList();
 
-        assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simpleList.size());
+        assertEquals(OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE / 2, simpleList.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private Simple createSimple(int i) {

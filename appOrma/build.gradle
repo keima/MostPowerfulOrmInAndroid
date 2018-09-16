@@ -9,6 +9,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -31,15 +33,16 @@ android {
 }
 
 ext {
-    ormaVersion = "4.2.5"
+    ormaVersion = "5.0.2"
 }
 
 dependencies {
-    compile project(":library")
-    testCompile 'junit:junit:4.12'
-    compile "com.android.support:support-v4:${supportPackageVersion}"
+    implementation project(":library")
+    implementation "com.android.support:support-v4:${supportPackageVersion}"
 
-    annotationProcessor "com.github.gfx.android.orma:orma-processor:$ormaVersion"
-    compile "com.github.gfx.android.orma:orma:$ormaVersion"
+    implementation "com.github.maskarade.android.orma:orma:$ormaVersion"
+    annotationProcessor "com.github.maskarade.android.orma:orma-processor:$ormaVersion"
 
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 }
