@@ -1,83 +1,88 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
-import android.support.annotation.NonNull;
-
-import com.raizlabs.android.dbflow.config.FlowConfig;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 import com.raizlabs.android.dbflow.config.FlowManager;
-import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
-
-import net.pside.android.example.mostpowerfulorminandroid.library.IOrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
 import net.pside.android.example.mostpowerfulorminandroid.model.SimpleDatabase;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple_Table;
+import org.junit.*;
+import org.junit.runner.RunWith;
 
 import java.util.Date;
 import java.util.List;
 
-public class DbFlowTest extends OrmTestCase {
-    public static final String TAG = DbFlowTest.class.getSimpleName();
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
 
-    @NonNull
-    @Override
-    public String getDatabaseName() {
-        return SimpleDatabase.NAME + ".db";
+@RunWith(AndroidJUnit4.class)
+public class DbFlowTest {
+
+    private static final String DATABASE_NAME = SimpleDatabase.NAME + ".db";
+
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
+
+    @Before
+    public void setUp() {
+        FlowManager.init(InstrumentationRegistry.getTargetContext());
     }
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        FlowManager.init(new FlowConfig.Builder(mContext).build());
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() {
         // DbFlowだけ事情が違うので別途対応する
         SQLite.delete().from(Simple.class).query();
         FlowManager.destroy();
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     public void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
-            FlowManager.getDatabase(SimpleDatabase.NAME).executeTransaction(new ITransaction() {
-                @Override
-                public void execute(DatabaseWrapper databaseWrapper) {
-                    for (int i = 1; i <= IOrmTestCase.NUMBER_OF_INSERT_SINGLE; i++) {
-                        insertSingle(i);
-                    }
-                }
-            });
+            FlowManager.getDatabase(SimpleDatabase.NAME)
+                    .executeTransaction(new ITransaction() {
+                        @Override
+                        public void execute(DatabaseWrapper databaseWrapper) {
+                            for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
+                                insertSingle(i);
+                            }
+                        }
+                    });
         } else {
-            for (int i = 1; i <= IOrmTestCase.NUMBER_OF_INSERT_SINGLE; i++) {
+            for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
                 insertSingle(i);
             }
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         List<Simple> simpleList = SQLite.select().from(Simple.class)
                 .where(Simple_Table.booleanValue.eq(true))
                 .queryList();
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simpleList.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private void insertSingle(int i) {

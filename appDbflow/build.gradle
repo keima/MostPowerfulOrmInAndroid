@@ -9,6 +9,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -30,14 +32,15 @@ android {
     }
 }
 
-def dbflow_version = "4.0.2"
-
 dependencies {
-    compile project(":library")
-    testCompile 'junit:junit:4.12'
-    compile "com.android.support:support-v4:${supportPackageVersion}"
+    implementation project(":library")
+    implementation "com.android.support:support-v4:${supportPackageVersion}"
 
+    def dbflow_version = "4.2.4"
     annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
-    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
-    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 }
