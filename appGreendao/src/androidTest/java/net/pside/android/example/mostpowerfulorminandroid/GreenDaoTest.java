@@ -1,51 +1,60 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.NonNull;
-
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Date;
 import java.util.List;
 
-public class GreenDaoTest extends OrmTestCase {
-    public static final String TAG = GreenDaoTest.class.getSimpleName();
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
 
-    public static final String DATABASE_NAME = "GreenDao.db";
+@RunWith(AndroidJUnit4.class)
+public class GreenDaoTest {
+
+    private static final String DATABASE_NAME = "GreenDao.db";
 
     private DaoSession mDaoSession;
     private SimpleDao mSimpleDao;
 
-    @NonNull
-    @Override
-    public String getDatabaseName() {
-        return DATABASE_NAME;
-    }
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() {
+        Context context = InstrumentationRegistry.getTargetContext();
         SQLiteDatabase db = new DaoMaster
-                .DevOpenHelper(mContext, DATABASE_NAME, null)
+                .DevOpenHelper(context, DATABASE_NAME, null)
                 .getWritableDatabase();
         mDaoSession = new DaoMaster(db).newSession();
         mSimpleDao = mDaoSession.getSimpleDao();
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
             mDaoSession.runInTx(new Runnable() {
@@ -62,15 +71,14 @@ public class GreenDaoTest extends OrmTestCase {
             }
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         List<Simple> simpleList = mSimpleDao.queryBuilder()
                 .where(SimpleDao.Properties.BooleanValue.eq(true))
                 .list();
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simpleList.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private void insertSingle(int i) {
