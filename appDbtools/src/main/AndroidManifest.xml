@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.pside.android.example.mostpowerfulorminandroid">
 
-    <application android:name="android.app.Application" />
+    <application android:name="android.app.Application">
+        <activity android:name=".MockActivity" />
+    </application>
 
 </manifest>

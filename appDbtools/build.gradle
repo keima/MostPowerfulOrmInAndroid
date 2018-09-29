@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.dbtools:gradle-dbtools-plugin:9.0.0'
+        classpath 'org.dbtools:gradle-dbtools-plugin:10.7.0'
     }
 }
 
@@ -19,6 +19,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -41,15 +43,18 @@ android {
 }
 
 dependencies {
-    compile project(":library")
-    testCompile 'junit:junit:4.12'
-    compile "com.android.support:support-v4:${supportPackageVersion}"
+    implementation project(":library")
+    implementation "com.android.support:support-v4:${supportPackageVersion}"
 
-    compile 'org.codejargon.feather:feather:1.0'
-    compile 'io.reactivex:rxjava:1.2.0'
-    compile 'joda-time:joda-time:2.9.4'
+    implementation 'org.codejargon.feather:feather:1.0'
+    implementation 'io.reactivex:rxjava:1.3.8'
+    implementation 'joda-time:joda-time:2.10'
 
-    compile 'org.dbtools:dbtools-android:9.0.0'
+    implementation 'org.dbtools:dbtools-android:10.7.0'
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
 }
 
 dbtools {
