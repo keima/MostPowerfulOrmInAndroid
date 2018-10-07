@@ -1,67 +1,81 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
-import net.pside.android.example.mostpowerfulorminandroid.library.IOrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
-import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
+import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-public class RealmTest extends OrmTestCase {
-    public static final String TAG = RealmTest.class.getSimpleName();
-    public static final String DATABASE_NAME = "Realm.realm";
+import java.util.Date;
+import java.util.List;
+
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
+
+@RunWith(AndroidJUnit4.class)
+public class RealmTest {
+    private static final String DATABASE_NAME = "Realm.realm";
+
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
 
     private Realm mRealm;
 
-    @Override
-    public String getDatabaseName() {
-        return null; // Realmにはデータベースのファイル名という概念がない
-    }
-
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-
-        Realm.init(getContext());
+    private void initRealm() {
+        Realm.init(InstrumentationRegistry.getTargetContext());
         RealmConfiguration conf = new RealmConfiguration.Builder()
                 .name(DATABASE_NAME)
                 .build();
-
-        mRealm = Realm.getInstance(conf);
+        Realm.setDefaultConfiguration(conf);
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-        mRealm.beginTransaction();
-        mRealm.delete(Simple.class);
-        mRealm.commitTransaction();
+    @Before
+    public void setUp() {
+        initRealm();
+        mRealm = Realm.getDefaultInstance();
     }
 
-    @Override
+    @After
+    public void tearDown() {
+        initRealm();
+
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.delete(Simple.class);
+        realm.commitTransaction();
+    }
+
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
             mRealm.beginTransaction();
         }
 
-        for (int i = 1; i <= IOrmTestCase.NUMBER_OF_INSERT_SINGLE; i++) {
+        for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
             if (!isBulkMode) {
                 mRealm.beginTransaction();
             }
@@ -77,23 +91,22 @@ public class RealmTest extends OrmTestCase {
             mRealm.commitTransaction();
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         RealmResults<Simple> simples = mRealm.where(Simple.class)
                 .equalTo("booleanValue", true)
                 .findAll();
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
+        rule.splitProfiling();
 
         List<Simple> simpleList = mRealm.copyFromRealm(simples);
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simpleList.size());
 
-        logger.addSplit("Manual Import!");
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
-    private Simple createSimple(int i) {
+    private void createSimple(int i) {
         Simple simple = mRealm.createObject(Simple.class);
         simple.setStringValue("TestData" + i);
         simple.setDateValue(new Date(i * 1000));
@@ -103,6 +116,5 @@ public class RealmTest extends OrmTestCase {
         simple.setLongValue((long) i);
         simple.setFloatValue((float) i);
         simple.setDoubleValue((double) i);
-        return simple;
     }
 }
