@@ -8,6 +8,9 @@ import cn.ieclipse.aorm.annotation.Table;
 @Table(name = "simple")
 public class Simple {
     @Column(name = "_id", id = true)
+    public long id;
+
+    @Column
     public int intValue;
 
     @Column
@@ -16,7 +19,7 @@ public class Simple {
     @Column
     public Date dateValue;
 
-    @Column
+    @Column(name = "booleanValue")
     public boolean booleanValue;
 
     @Column

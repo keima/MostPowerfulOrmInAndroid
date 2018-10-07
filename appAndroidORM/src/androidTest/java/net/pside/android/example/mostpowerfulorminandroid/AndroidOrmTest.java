@@ -1,44 +1,64 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+import cn.ieclipse.aorm.Aorm;
+import cn.ieclipse.aorm.Criteria;
+import cn.ieclipse.aorm.Restrictions;
+import cn.ieclipse.aorm.Session;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Date;
 import java.util.List;
 
-import cn.ieclipse.aorm.Criteria;
-import cn.ieclipse.aorm.Restrictions;
-import cn.ieclipse.aorm.Session;
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
 
-public class AndroidOrmTest extends OrmTestCase {
-    public static final String TAG = AndroidOrmTest.class.getSimpleName();
-    public static final String DATABASE_NAME = SimpleContentProvider.DB_NAME;
+@RunWith(AndroidJUnit4.class)
+public class AndroidOrmTest {
 
-    @Override
-    public String getDatabaseName() {
-        return DATABASE_NAME;
+    private static final String TAG = AndroidOrmTest.class.getSimpleName();
+    private static final String DATABASE_NAME = SimpleContentProvider.DB_NAME;
+
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
+
+    private Session session;
+
+    @Before
+    public void setUp(){
+        session = SimpleContentProvider.getSession();
     }
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
+    @After
+    public void tearDown() {
+        session.deleteAll(Simple.class);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
-//        insert(true);
+        insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
-
-        Session session = SimpleContentProvider.getSession();
+        rule.beginProfiling();
 
         if (isBulkMode) {
             session.beginTransaction();
@@ -49,19 +69,18 @@ public class AndroidOrmTest extends OrmTestCase {
         }
 
         if (isBulkMode) {
+            session.setTransactionSuccessful();
             session.endTransaction();
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
-        Criteria criteria = Criteria.create(Simple.class);
-        criteria.add(Restrictions.eq("booleanValue", true));
+        Criteria criteria = Criteria.create(Simple.class)
+                .add(Restrictions.eq("booleanValue", 1));
         List<Simple> simples = session.list(criteria);
-
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private Simple createSimple(int i) {

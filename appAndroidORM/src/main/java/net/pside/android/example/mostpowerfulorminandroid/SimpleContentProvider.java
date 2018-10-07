@@ -18,7 +18,7 @@ import cn.ieclipse.aorm.Session;
 public class SimpleContentProvider extends ContentProvider {
     public static final String AUTH = BuildConfig.APPLICATION_ID + ".provider";
     public static final Uri URI = Uri.parse("content://" + AUTH);
-    public static final String DB_NAME = "simple.db";
+    public static final String DB_NAME = "androidorm.db";
     private static Session session;
     private SQLiteOpenHelper openHelper;
 
