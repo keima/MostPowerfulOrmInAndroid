@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import org.bitbucket.txdrive.electra.Electra;
 
-
 public class MySQLiteOpenHelper extends SQLiteOpenHelper {
 
     public MySQLiteOpenHelper(Context context, String name, int version) {
