@@ -1,44 +1,54 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+import me.himanshusoni.quantumflux.QuantumFlux;
+import me.himanshusoni.quantumflux.model.query.Select;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
+import org.junit.After;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import me.himanshusoni.quantumflux.QuantumFlux;
-import me.himanshusoni.quantumflux.model.query.Select;
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
 
-public class QuantumfluxTest extends OrmTestCase {
-    public static final String TAG = QuantumfluxTest.class.getSimpleName();
-    public static final String DATABASE_NAME = "quantumflux.db";
+@RunWith(AndroidJUnit4.class)
+public class QuantumFluxTest {
+    private static final String TAG = QuantumFluxTest.class.getSimpleName();
+    private static final String DATABASE_NAME = "quantumflux.db";
 
-    @Override
-    public String getDatabaseName() {
-        return DATABASE_NAME;
-    }
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
 
-    @Override
-    protected void tearDown() throws Exception {
-        stopDatabaseCleanup = true;
+    @After
+    public void tearDown() {
         QuantumFlux.deleteAll(Simple.class);
-        super.tearDown();
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
             ArrayList<Simple> list = new ArrayList<>();
@@ -53,14 +63,13 @@ public class QuantumfluxTest extends OrmTestCase {
             }
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         List<Simple> simples = Select.from(Simple.class).whereEquals("boolean_value", true).queryAsList();
 
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private Simple createSimple(int i) {
