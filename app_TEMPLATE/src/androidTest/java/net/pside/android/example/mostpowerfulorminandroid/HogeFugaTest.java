@@ -1,56 +1,74 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
-import net.pside.android.example.mostpowerfulorminandroid.library.IOrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+
 import java.util.Date;
+import java.util.List;
 
-public class HogeFugaTest extends OrmTestCase {
-    public static final String TAG = HogeFugaTest.class.getSimpleName();
-    public static final String DATABASE_NAME = "torch.db";
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
 
-    @Override
-    public String getDatabaseName() {
-        return DATABASE_NAME;
-    }
+@RunWith(AndroidJUnit4.class)
+public class HogeFugaTest {
 
-    @Override
-    public void setUp() throws Exception {
+    private static final String TAG = HogeFugaTest.class.getSimpleName();
+    private static final String DATABASE_NAME = "torch.db";
+
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
+
+    @Before
+    public void setUp() {
         super.setUp();
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
+            // ...
         }
 
         for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
-
+            // ...
         }
 
         if (isBulkMode) {
+            // ...
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
-
+        // ...
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private Simple createSimple(int i) {
