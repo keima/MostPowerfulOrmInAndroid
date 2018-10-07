@@ -1,54 +1,65 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
-
 import net.pside.android.example.mostpowerfulorminandroid.helper.MySQLiteOpenHelper;
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public class OrmLiteTest extends OrmTestCase {
-    public static final String TAG = OrmLiteTest.class.getSimpleName();
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+@RunWith(AndroidJUnit4.class)
+public class OrmLiteTest {
+
+    private static final String TAG = OrmLiteTest.class.getSimpleName();
+    private static final String DATABASE_NAME = MySQLiteOpenHelper.DATABASE_NAME;
+
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
 
     private Dao<Simple, Long> mSimpleDao;
 
-    @Override
-    public String getDatabaseName() {
-        return MySQLiteOpenHelper.DATABASE_NAME;
-    }
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        MySQLiteOpenHelper sqLiteOpenHelper = new MySQLiteOpenHelper(getContext());
+    @Before
+    public void setUp() throws Exception {
+        MySQLiteOpenHelper sqLiteOpenHelper = new MySQLiteOpenHelper(
+                InstrumentationRegistry.getTargetContext()
+        );
         mSimpleDao = sqLiteOpenHelper.getSimpleDao();
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
-
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
             try {
@@ -76,7 +87,7 @@ public class OrmLiteTest extends OrmTestCase {
             }
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         try {
             QueryBuilder<Simple, Long> builder = mSimpleDao.queryBuilder();
@@ -91,8 +102,7 @@ public class OrmLiteTest extends OrmTestCase {
             fail();
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private void insertSingle(int i) throws SQLException {
