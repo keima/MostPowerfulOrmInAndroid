@@ -1,9 +1,10 @@
 buildscript {
     repositories {
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.siimkinks.sqlitemagic:sqlitemagic-plugin:0.13.0'
+        classpath 'com.siimkinks.sqlitemagic:sqlitemagic-plugin:0.23.1'
     }
 }
 
