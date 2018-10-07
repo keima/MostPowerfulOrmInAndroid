@@ -1,0 +1,63 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:1028321892433984750",
+      "lastPropertyId": "9:8426489959237056903",
+      "name": "Simple",
+      "properties": [
+        {
+          "id": "1:8464128241201946772",
+          "name": "id"
+        },
+        {
+          "id": "2:4601200642190948835",
+          "name": "stringValue"
+        },
+        {
+          "id": "3:1781754808946860239",
+          "name": "dateValue"
+        },
+        {
+          "id": "4:8765506943258187371",
+          "indexId": "1:9010641415515929373",
+          "name": "booleanValue"
+        },
+        {
+          "id": "5:3723174096935079443",
+          "name": "shortValue"
+        },
+        {
+          "id": "6:2517150457371794710",
+          "name": "intValue"
+        },
+        {
+          "id": "7:4608015422039462275",
+          "name": "longValue"
+        },
+        {
+          "id": "8:9175164426390384340",
+          "name": "floatValue"
+        },
+        {
+          "id": "9:8426489959237056903",
+          "name": "doubleValue"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "1:1028321892433984750",
+  "lastIndexId": "1:9010641415515929373",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

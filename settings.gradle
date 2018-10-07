@@ -32,7 +32,7 @@ include 'appReActiveAndroid'
 
 include 'appRealm'
 include 'appPaper'
-// include 'appObjectBox'
+include 'appObjectBox'
 
 //include 'appShillelagh' // released this on 1 Dec 2014
 //include 'appOllie'
