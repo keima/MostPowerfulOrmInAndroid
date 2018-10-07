@@ -32,17 +32,15 @@ android {
     }
 }
 
-ext {
-    ormaVersion = "5.0.2"
-}
-
 dependencies {
     implementation project(":library")
     implementation "com.android.support:support-v4:${supportPackageVersion}"
 
-    implementation "com.github.maskarade.android.orma:orma:$ormaVersion"
-    annotationProcessor "com.github.maskarade.android.orma:orma-processor:$ormaVersion"
-
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
+
+    // input implementation , provided or annotationProcessor dependency here
+    def ormaVersion = "5.0.2"
+    implementation "com.github.maskarade.android.orma:orma:$ormaVersion"
+    annotationProcessor "com.github.maskarade.android.orma:orma-processor:$ormaVersion"
 }
