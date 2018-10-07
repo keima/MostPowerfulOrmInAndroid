@@ -1,34 +1,45 @@
 include 'library'
 
+// see: https://docs.google.com/spreadsheets/d/14irRYr4V0K2I5I6u4fjo5cwiwRVLEvrUNBsDHEKsaeU/edit#gid=0
+
+include 'appOrmlite'
+include 'appGreendao', 'DaoGenerator'
 include 'appActiveandroid'
+include 'appRoom'
+
+include 'appSugarorm'
 include 'appDbflow'
 include 'appDbtools'
-include 'appGreendao', 'DaoGenerator'
-include 'appOrma'
-include 'appOrmlite'
-include 'appRealm'
-//include 'appShillelagh' // released this on 1 Dec 2014
-include 'appSugarorm'
-include 'appOllie'
-//include 'appTorch' // released this on 25 Nov 2014
+
 include 'appCupboard'
 include 'appSlimrepo'
 include 'appRushorm'
-include 'appSquidb'
-//include 'appEasyliteORM' // released this on 8 Nov 2015
-//include 'appTriORM' // inactive development : committed on 22 Feb 2016
-include 'appQuantumflux'
-include 'appCPOrm'
-//include 'appSnappyDB' // (Jun 09, 2015)
-//include 'appMapDB' // This is not `Android` ORM
-include 'appPaper'
-//include 'appSabres' // Version 0.9.18 (17-11-2015)
-include 'appRoom'
 
+include 'appSquidb'
+include 'appOrma'
+include 'appQuantumflux'
+
+include 'appCPOrm'
 include 'appAndroidORM'
-include 'appMemoryOrm'
 include 'appElectra'
+
 include 'appRequery'
 include 'appFreezer'
 include 'appStorio'
+
 include 'appSqliteMagic'
+include 'appReActiveAndroid'
+
+include 'appRealm'
+include 'appPaper'
+// include 'appObjectBox'
+
+//include 'appShillelagh' // released this on 1 Dec 2014
+//include 'appOllie'
+//include 'appTorch' // released this on 25 Nov 2014
+//include 'appEasyliteORM' // released this on 8 Nov 2015
+//include 'appTriORM' // inactive development : committed on 22 Feb 2016
+//include 'appSnappyDB' // (Jun 09, 2015)
+//include 'appMapDB' // This is not `Android` ORM
+//include 'appSabres' // Version 0.9.18 (17-11-2015)
+//include 'appMemoryOrm' // repo deleted
