@@ -39,6 +39,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
 
-    // input compile , provided or annotationProcessor dependency here
+    // input implementation , provided or annotationProcessor dependency here
     implementation 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
 }
