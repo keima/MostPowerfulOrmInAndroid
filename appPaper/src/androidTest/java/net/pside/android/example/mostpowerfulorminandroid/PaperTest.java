@@ -1,43 +1,55 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+import io.paperdb.Paper;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import io.paperdb.Paper;
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
 
-public class PaperTest extends OrmTestCase {
-    public static final String TAG = PaperTest.class.getSimpleName();
-    public static final String DATABASE_NAME = "torch.db";
+@RunWith(AndroidJUnit4.class)
+public class PaperTest {
 
-    @Override
-    public String getDatabaseName() {
-        return DATABASE_NAME;
+    private static final String TAG = PaperTest.class.getSimpleName();
+    private static final String DATABASE_NAME = "paper.db";
+
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
+
+    @Before
+    public void setUp() {
+        Paper.init(InstrumentationRegistry.getTargetContext());
     }
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        Paper.init(mContext);
-    }
+//    @Test
+//    @OrmBenchmark(false)
+//    public void testSingleInsert() {
+//        insert(false);
+//    }
 
-    @Override
-    public void testSingleInsert() {
-        insert(false);
-    }
-
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
-//        insert(true);
+        insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
         }
@@ -51,7 +63,7 @@ public class PaperTest extends OrmTestCase {
         if (isBulkMode) {
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         LinkedList<Simple> l = Paper.book().read("Simples");
         List<Simple> simples = new ArrayList<>();
@@ -60,11 +72,9 @@ public class PaperTest extends OrmTestCase {
                 simples.add(simple);
         }
 
-
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private Simple createSimple(int i) {
