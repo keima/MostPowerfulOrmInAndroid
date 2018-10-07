@@ -1,48 +1,60 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
 import net.pside.android.example.mostpowerfulorminandroid.model.SimpleSQLiteOpenHelper;
+import nl.qbusict.cupboard.CupboardFactory;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Date;
 import java.util.List;
 
-import nl.qbusict.cupboard.CupboardFactory;
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
 
-public class CupboardTest extends OrmTestCase {
-    public static final String TAG = CupboardTest.class.getSimpleName();
-    public static final String DATABASE_NAME = SimpleSQLiteOpenHelper.DB_NAME;
+@RunWith(AndroidJUnit4.class)
+public class CupboardTest {
+
+    private static final String TAG = CupboardTest.class.getSimpleName();
+    private static final String DATABASE_NAME = SimpleSQLiteOpenHelper.DB_NAME;
+
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
 
     SQLiteDatabase db;
 
-    @Override
-    public String getDatabaseName() {
-        return DATABASE_NAME;
-    }
-
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        SimpleSQLiteOpenHelper helper = new SimpleSQLiteOpenHelper(mContext);
+    @Before
+    public void setUp() {
+        SimpleSQLiteOpenHelper helper = new SimpleSQLiteOpenHelper(
+                InstrumentationRegistry.getTargetContext()
+        );
         db = helper.getWritableDatabase();
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
             db.beginTransaction();
@@ -58,7 +70,7 @@ public class CupboardTest extends OrmTestCase {
             db.endTransaction();
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         List<Simple> simples = CupboardFactory.cupboard().withDatabase(db)
                 .query(Simple.class)
@@ -67,8 +79,7 @@ public class CupboardTest extends OrmTestCase {
 
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private Simple createSimple(int i) {
