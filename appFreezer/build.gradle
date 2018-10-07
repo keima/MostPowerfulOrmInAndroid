@@ -9,6 +9,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -31,14 +33,15 @@ android {
 }
 
 dependencies {
-    def freezerVersion = "2.1.0"
+    implementation project(":library")
+    implementation "com.android.support:support-v4:${supportPackageVersion}"
 
-    compile project(":library")
-    testCompile 'junit:junit:4.12'
-    compile "com.android.support:support-v4:${supportPackageVersion}"
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 
     // input compile , provided or annotationProcessor dependency here
-    compile "fr.xebia.android.freezer:freezer:$freezerVersion"
+    def freezerVersion = "2.1.0"
+    implementation "fr.xebia.android.freezer:freezer:$freezerVersion"
     compileOnly "fr.xebia.android.freezer:freezer-annotations:$freezerVersion"
     annotationProcessor "fr.xebia.android.freezer:freezer-compiler:$freezerVersion"
 }
