@@ -47,6 +47,11 @@ public class ActiveAndroidTest {
         ActiveAndroid.initialize(config);
     }
 
+    @After
+    public void tearDown() {
+        ActiveAndroid.dispose();
+    }
+
     @Test
     @OrmBenchmark(false)
     public void testSingleInsert() {
@@ -93,10 +98,5 @@ public class ActiveAndroidTest {
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simpleList.size());
 
         rule.endProfiling();
-    }
-
-    @After
-    public void tearDown() {
-        ActiveAndroid.dispose();
     }
 }
