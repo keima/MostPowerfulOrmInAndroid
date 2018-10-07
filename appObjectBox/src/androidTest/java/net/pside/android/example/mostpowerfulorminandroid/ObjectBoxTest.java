@@ -67,7 +67,6 @@ public class ObjectBoxTest {
         rule.beginProfiling();
 
         if (isBulkMode) {
-            // ...
             List<Simple> items = new ArrayList<>();
             for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
                 items.add(createSimple(i));
