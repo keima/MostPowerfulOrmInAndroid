@@ -1,48 +1,53 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
-
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+import com.orm.SugarContext;
 import com.orm.SugarRecord;
 import com.orm.SugarTransactionHelper;
-
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Date;
 import java.util.List;
 
-public class SugarOrmTest extends OrmTestCase {
-    public static final String TAG = SugarOrmTest.class.getSimpleName();
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
 
-    public String getDatabaseName() {
-        return "sugarorm.db";
-    }
+@RunWith(AndroidJUnit4.class)
+public class SugarOrmTest {
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        Thread.sleep(500); // Application#onCreate()内のSugarORMのinitializeより先にテストケースが走ることがある・・・
-    }
+    private static final String TAG = SugarOrmTest.class.getSimpleName();
+    private static final String DATABASE_NAME = "sugarorm.db";
 
-    @Override
-    protected void tearDown() throws Exception {
-        stopDatabaseCleanup = true;
-        SugarRecord.deleteAll(Simple.class);
-        super.tearDown();
-    }
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
 
-    @Override
+// Initialize on Application class
+
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, OrmTestCase.MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
             SugarTransactionHelper.doInTransaction(new SugarTransactionHelper.Callback() {
@@ -59,13 +64,12 @@ public class SugarOrmTest extends OrmTestCase {
             }
         }
 
-        logger.addSplit(OrmTestCase.MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         List<Simple> simpleList = SugarRecord.find(Simple.class, "BOOLEAN_VALUE = ?", "1");
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simpleList.size());
 
-        logger.addSplit(OrmTestCase.MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private void insertSingle(int i) {
