@@ -9,6 +9,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -31,20 +33,20 @@ android {
 }
 
 dependencies {
-    compile project(":library")
-    testCompile 'junit:junit:4.12'
-    compile "com.android.support:support-v4:${supportPackageVersion}"
+    implementation project(":library")
+    implementation "com.android.support:support-v4:${supportPackageVersion}"
 
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+
+    // input implementation , provided or annotationProcessor dependency here
     def storioVersion = "1.13.0"
+    implementation "com.pushtorefresh.storio:sqlite:$storioVersion"
+    implementation "com.pushtorefresh.storio:content-resolver:$storioVersion"
 
-    // input compile , provided or annotationProcessor dependency here
-    compile "com.pushtorefresh.storio:sqlite:$storioVersion"
-    compile "com.pushtorefresh.storio:content-resolver:$storioVersion"
-
-    compile "com.pushtorefresh.storio:sqlite-annotations:$storioVersion"
+    implementation "com.pushtorefresh.storio:sqlite-annotations:$storioVersion"
     annotationProcessor "com.pushtorefresh.storio:sqlite-annotations-processor:$storioVersion"
 
-    compile "com.pushtorefresh.storio:content-resolver-annotations:$storioVersion"
+    implementation "com.pushtorefresh.storio:content-resolver-annotations:$storioVersion"
     annotationProcessor "com.pushtorefresh.storio:content-resolver-annotations-processor:$storioVersion"
-
 }

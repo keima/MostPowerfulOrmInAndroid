@@ -1,52 +1,63 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.impl.DefaultStorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
-
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
 import net.pside.android.example.mostpowerfulorminandroid.model.SimpleSQLiteTypeMapping;
 import net.pside.android.example.mostpowerfulorminandroid.model.SimplesTable;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class StorioSQLiteTest extends OrmTestCase {
-    public static final String TAG = StorioSQLiteTest.class.getSimpleName();
-    public static final String DATABASE_NAME = "storio_sqlite.db";
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
+
+@RunWith(AndroidJUnit4.class)
+public class StorioSQLiteTest {
+    private static final String DATABASE_NAME = "storio_sqlite.db";
 
     private StorIOSQLite storIOSQLite;
 
-    @Override
-    public String getDatabaseName() {
-        return DATABASE_NAME;
-    }
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() {
         storIOSQLite = DefaultStorIOSQLite.builder()
-                .sqliteOpenHelper(new MySQLiteOpenHelper(getContext(), DATABASE_NAME, 1))
+                .sqliteOpenHelper(new MySQLiteOpenHelper(
+                        InstrumentationRegistry.getTargetContext(), DATABASE_NAME, 1
+                ))
                 .addTypeMapping(Simple.class, new SimpleSQLiteTypeMapping())
                 .build();
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
             ArrayList<Simple> items = new ArrayList<>();
@@ -67,7 +78,7 @@ public class StorioSQLiteTest extends OrmTestCase {
             }
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         List<Simple> simples = storIOSQLite.get().listOfObjects(Simple.class)
                 .withQuery(Query.builder()
@@ -80,8 +91,7 @@ public class StorioSQLiteTest extends OrmTestCase {
 
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private Simple createSimple(int i) {

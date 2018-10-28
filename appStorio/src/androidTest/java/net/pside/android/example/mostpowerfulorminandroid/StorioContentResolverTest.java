@@ -1,66 +1,76 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
+import android.content.Context;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 import com.pushtorefresh.storio.contentresolver.StorIOContentResolver;
 import com.pushtorefresh.storio.contentresolver.impl.DefaultStorIOContentResolver;
 import com.pushtorefresh.storio.contentresolver.queries.DeleteQuery;
 import com.pushtorefresh.storio.contentresolver.queries.Query;
-
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
 import net.pside.android.example.mostpowerfulorminandroid.model.SimpleContentResolverTypeMapping;
 import net.pside.android.example.mostpowerfulorminandroid.model.SimplesTable;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class StorioContentResolverTest extends OrmTestCase {
-    public static final String TAG = StorioContentResolverTest.class.getSimpleName();
-    public static final String DATABASE_NAME = MyContentProvider.DATABASE_NAME;
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
+
+@RunWith(AndroidJUnit4.class)
+public class StorioContentResolverTest {
+    private static final String DATABASE_NAME = MyContentProvider.DATABASE_NAME;
 
     private StorIOContentResolver storIOContentResolver;
 
-    @Override
-    public String getDatabaseName() {
-        return DATABASE_NAME;
-    }
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() {
+        Context context = InstrumentationRegistry.getTargetContext();
         storIOContentResolver = DefaultStorIOContentResolver.builder()
-                .contentResolver(getContext().getContentResolver())
+                .contentResolver(context.getContentResolver())
                 .addTypeMapping(Simple.class, new SimpleContentResolverTypeMapping())
                 .build();
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() {
         // ContentProviderはDB差し替えがしづらいため
-        stopDatabaseCleanup = true;
         storIOContentResolver.delete()
                 .byQuery(DeleteQuery.builder()
                         .uri(SimplesTable.URI)
                         .build())
                 .prepare()
                 .executeAsBlocking();
-        super.tearDown();
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
             ArrayList<Simple> items = new ArrayList<>();
@@ -80,7 +90,7 @@ public class StorioContentResolverTest extends OrmTestCase {
             }
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         List<Simple> simples = storIOContentResolver.get().listOfObjects(Simple.class)
                 .withQuery(Query.builder()
@@ -93,8 +103,7 @@ public class StorioContentResolverTest extends OrmTestCase {
 
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private Simple createSimple(int i) {
