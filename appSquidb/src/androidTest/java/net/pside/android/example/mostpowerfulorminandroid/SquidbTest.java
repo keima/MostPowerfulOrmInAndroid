@@ -1,45 +1,58 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 import com.yahoo.squidb.data.SquidCursor;
 import com.yahoo.squidb.sql.Query;
-
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
 import net.pside.android.example.mostpowerfulorminandroid.model.SimpleDatabase;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-public class SquidbTest extends OrmTestCase {
-    public static final String TAG = SquidbTest.class.getSimpleName();
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
+
+@RunWith(AndroidJUnit4.class)
+public class SquidbTest {
+
+    private static final String DATABASE_NAME = SimpleDatabase.DB_NAME;
 
     private SimpleDatabase db;
 
-    @Override
-    public String getDatabaseName() {
-        return SimpleDatabase.DB_NAME;
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
+
+    @Before
+    public void setUp() {
+        db = new SimpleDatabase(
+                InstrumentationRegistry.getTargetContext()
+        );
     }
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-
-        db = new SimpleDatabase(mContext);
-    }
-
-    @Override
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
             db.beginTransaction();
@@ -55,7 +68,7 @@ public class SquidbTest extends OrmTestCase {
             db.endTransaction();
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         Query q = Query.select().where(Simple.BOOLEAN_VALUE.eq(true));
         SquidCursor<Simple> simpleCursors = db.query(Simple.class, q);
@@ -71,8 +84,7 @@ public class SquidbTest extends OrmTestCase {
 
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private Simple createSimple(int i) {
