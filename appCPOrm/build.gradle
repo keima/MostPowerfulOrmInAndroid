@@ -40,6 +40,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
 
     // input compile , provided or annotationProcessor dependency here
-    compile 'za.co.cporm:CPOrm:3.0.9'
+    implementation 'za.co.cporm:CPOrm:3.0.9'
 
 }

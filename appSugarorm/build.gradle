@@ -40,6 +40,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
 
     // input implementation , provided or annotationProcessor dependency here
-    compile 'com.github.satyan:sugar:1.5'
+    implementation 'com.github.satyan:sugar:1.5'
 
 }

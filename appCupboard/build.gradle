@@ -40,5 +40,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
 
     // input compile , provided or annotationProcessor dependency here
-    compile 'nl.qbusict:cupboard:2.2.0'
+    implementation 'nl.qbusict:cupboard:2.2.0'
 }
