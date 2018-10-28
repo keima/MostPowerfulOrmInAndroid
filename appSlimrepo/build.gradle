@@ -9,6 +9,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -31,12 +33,14 @@ android {
 }
 
 dependencies {
-    compile project(":library")
-    testCompile 'junit:junit:4.12'
-    compile "com.android.support:support-v4:${supportPackageVersion}"
+    implementation project(":library")
+    implementation "com.android.support:support-v4:${supportPackageVersion}"
 
-    // input compile , provided or annotationProcessor dependency here
-    compile 'com.slimgears.slimrepo:slimrepo-android:0.9.16'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+
+    // input implementation , provided or annotationProcessor dependency here
+    implementation 'com.slimgears.slimrepo:slimrepo-android:0.9.16'
     annotationProcessor 'com.slimgears.slimrepo:slimrepo-apt:0.9.16'
 
 }
