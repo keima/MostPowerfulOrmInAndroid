@@ -1,70 +1,69 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
-import android.app.Application;
-
-import net.pside.android.example.mostpowerfulorminandroid.library.ApplicationOrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+import co.uk.rushorm.android.RushAndroid;
+import co.uk.rushorm.core.Rush;
+import co.uk.rushorm.core.RushCore;
+import co.uk.rushorm.core.RushSearch;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.SetupObject;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import co.uk.rushorm.android.RushAndroid;
-import co.uk.rushorm.core.Rush;
-import co.uk.rushorm.core.RushCore;
-import co.uk.rushorm.core.RushSearch;
+import static android.support.test.InstrumentationRegistry.getContext;
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
 
-public class RushormTest extends ApplicationOrmTestCase<Application> {
-    public static final String TAG = RushormTest.class.getSimpleName();
-    public static final String DATABASE_NAME = "rush.db";
+@RunWith(AndroidJUnit4.class)
+public class RushormTest {
 
-    public RushormTest() {
-        super(Application.class);
-    }
+    private static final String DATABASE_NAME = "rush.db";
 
-    @Override
-    public String getDatabaseName() {
-        return DATABASE_NAME;
-    }
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        getContext().deleteDatabase(DATABASE_NAME);
-
+    @Before
+    public void setUp() {
         List<Class<? extends Rush>> classes = new ArrayList<>();
         classes.add(SetupObject.class);
         classes.add(Simple.class);
-        RushAndroid.initialize(getContext(), classes);
+        RushAndroid.initialize(
+                InstrumentationRegistry.getTargetContext(),
+                classes
+        );
 
         // Saving this object makes setUp wait until initialize finishes
         // otherwise it seems that the thread initialize is done on gets killed
         new SetupObject().save();
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        stopDatabaseCleanup = true;
-
-        RushCore.getInstance().deleteAll(Simple.class);
-        super.tearDown();
-    }
-
-    @Override
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, isBulkMode ? MSG_LOGGER_INITIALIZE_BULK_ON : MSG_LOGGER_INITIALIZE_BULK_OFF);
+        rule.beginProfiling();
 
         if (isBulkMode) {
             ArrayList<Simple> simpleList = new ArrayList<>();
@@ -78,14 +77,13 @@ public class RushormTest extends ApplicationOrmTestCase<Application> {
             }
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         List<Simple> simples = new RushSearch().whereEqual("booleanValue", true).find(Simple.class);
 
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private Simple createSimple(int i) {
