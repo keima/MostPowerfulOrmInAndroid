@@ -1,46 +1,55 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 import com.siimkinks.sqlitemagic.Select;
 import com.siimkinks.sqlitemagic.SimpleTable;
 import com.siimkinks.sqlitemagic.SqliteMagic;
 import com.siimkinks.sqlitemagic.Transaction;
-
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
+import org.junit.After;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Date;
 import java.util.List;
 
-public class SqliteMagicTest extends OrmTestCase {
-    public static final String TAG = SqliteMagicTest.class.getSimpleName();
-    public static final String DATABASE_NAME = BuildConfig.DB_NAME;
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
 
-    @Override
-    public String getDatabaseName() {
-        return DATABASE_NAME;
-    }
+@RunWith(AndroidJUnit4.class)
+public class SqliteMagicTest {
 
-    @Override
-    protected void tearDown() throws Exception {
-        stopDatabaseCleanup = true;
+    private static final String DATABASE_NAME = BuildConfig.DB_NAME;
+
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
+
+    @After
+    public void tearDown() throws Exception {
         Simple.deleteTable().execute();
-
-        super.tearDown();
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
             Transaction transaction = SqliteMagic.newTransaction();
@@ -57,7 +66,7 @@ public class SqliteMagicTest extends OrmTestCase {
             }
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         List<Simple> simples = Select.from(SimpleTable.SIMPLE)
                 .where(SimpleTable.SIMPLE.BOOLEAN_VALUE.is(true))
@@ -65,8 +74,7 @@ public class SqliteMagicTest extends OrmTestCase {
 
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private Simple createSimple(int i) {

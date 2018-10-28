@@ -6,7 +6,7 @@ import com.siimkinks.sqlitemagic.annotation.Table;
 
 import java.util.Date;
 
-@Table(persistAll = true)
+@Table
 public class Simple {
     @Column(value = "_id")
     @Id
