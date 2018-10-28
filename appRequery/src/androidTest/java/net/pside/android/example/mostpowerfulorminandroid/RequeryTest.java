@@ -1,51 +1,63 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
-import net.pside.android.example.mostpowerfulorminandroid.library.OrmTestCase;
-import net.pside.android.example.mostpowerfulorminandroid.library.util.TimingLogger;
+import android.content.Context;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+import io.requery.Persistable;
+import io.requery.android.sqlite.DatabaseSource;
+import io.requery.sql.EntityDataStore;
+import io.requery.sql.TableCreationMode;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmark;
+import net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule;
 import net.pside.android.example.mostpowerfulorminandroid.model.Models;
 import net.pside.android.example.mostpowerfulorminandroid.model.Simple;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import io.requery.Persistable;
-import io.requery.android.sqlite.DatabaseSource;
-import io.requery.sql.EntityDataStore;
-import io.requery.sql.TableCreationMode;
+import static net.pside.android.example.mostpowerfulorminandroid.library.OrmBenchmarkRule.NUMBER_OF_INSERT_SINGLE;
+import static org.junit.Assert.assertEquals;
 
-public class RequeryTest extends OrmTestCase {
-    public static final String TAG = RequeryTest.class.getSimpleName();
+@RunWith(AndroidJUnit4.class)
+public class RequeryTest {
+
     public static final String DATABASE_NAME = "requery.db";
 
     private EntityDataStore<Persistable> store;
 
-    @Override
-    public String getDatabaseName() {
-        return DATABASE_NAME;
-    }
+    @Rule
+    public OrmBenchmarkRule rule = new OrmBenchmarkRule(
+            InstrumentationRegistry.getTargetContext(),
+            DATABASE_NAME
+    );
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-
-        DatabaseSource source = new DatabaseSource(getContext(), Models.DEFAULT, DATABASE_NAME, 1);
+    @Before
+    public void setUp() {
+        Context context = InstrumentationRegistry.getTargetContext();
+        DatabaseSource source = new DatabaseSource(context, Models.DEFAULT, DATABASE_NAME, 1);
         source.setTableCreationMode(TableCreationMode.DROP_CREATE);
         store = new EntityDataStore<>(source.getConfiguration());
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(false)
     public void testSingleInsert() {
         insert(false);
     }
 
-    @Override
+    @Test
+    @OrmBenchmark(true)
     public void testSingleBulkInsert() {
         insert(true);
     }
 
     private void insert(boolean isBulkMode) {
-        TimingLogger logger = new TimingLogger(TAG, MSG_LOGGER_INITIALIZE(TAG, isBulkMode));
+        rule.beginProfiling();
 
         if (isBulkMode) {
             store.runInTransaction(new Callable<Void>() {
@@ -63,7 +75,7 @@ public class RequeryTest extends OrmTestCase {
             }
         }
 
-        logger.addSplit(MSG_LOGGER_SPLIT_INSERT);
+        rule.splitProfiling();
 
         List<Simple> simples = store.select(Simple.class)
                 .where(Simple.BOOLEAN_VALUE.equal(true))
@@ -71,8 +83,7 @@ public class RequeryTest extends OrmTestCase {
 
         assertEquals(NUMBER_OF_INSERT_SINGLE / 2, simples.size());
 
-        logger.addSplit(MSG_LOGGER_SPLIT_SELECT);
-        logger.dumpToLog();
+        rule.endProfiling();
     }
 
     private Simple createSimple(int i) {
