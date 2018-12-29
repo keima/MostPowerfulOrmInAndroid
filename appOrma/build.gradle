@@ -40,7 +40,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
 
     // input implementation , provided or annotationProcessor dependency here
-    def ormaVersion = "5.0.2"
+    def ormaVersion = "6.0.2"
     implementation "com.github.maskarade.android.orma:orma:$ormaVersion"
     annotationProcessor "com.github.maskarade.android.orma:orma-processor:$ormaVersion"
 }
