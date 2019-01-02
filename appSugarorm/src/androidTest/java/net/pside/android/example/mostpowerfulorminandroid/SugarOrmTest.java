@@ -14,6 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,10 +30,16 @@ public class SugarOrmTest {
     @Rule
     public OrmBenchmarkRule rule = new OrmBenchmarkRule(
             InstrumentationRegistry.getTargetContext(),
-            DATABASE_NAME
+            DATABASE_NAME,
+            true
     );
 
 // Initialize on Application class
+
+    @After
+    public void after() {
+        SugarRecord.deleteAll(Simple.class);
+    }
 
     @Test
     @OrmBenchmark(false)
@@ -50,17 +57,14 @@ public class SugarOrmTest {
         rule.beginProfiling();
 
         if (isBulkMode) {
-            SugarTransactionHelper.doInTransaction(new SugarTransactionHelper.Callback() {
-                @Override
-                public void manipulateInTransaction() {
-                    for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
-                        insertSingle(i);
-                    }
-                }
-            });
+            List<Simple> items = new ArrayList<>();
+            for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
+                items.add(insertSingle(i));
+            }
+            SugarRecord.saveInTx(items);
         } else {
             for (int i = 1; i <= NUMBER_OF_INSERT_SINGLE; i++) {
-                insertSingle(i);
+                SugarRecord.save(insertSingle(i));
             }
         }
 
@@ -72,7 +76,7 @@ public class SugarOrmTest {
         rule.endProfiling();
     }
 
-    private void insertSingle(int i) {
+    private Simple insertSingle(int i) {
         Simple simple = new Simple();
         simple.stringValue = "TestData" + i;
         simple.dateValue = new Date(i * 1000);
@@ -83,6 +87,6 @@ public class SugarOrmTest {
         simple.floatValue = i;
         simple.doubleValue = i;
 
-        SugarRecord.save(simple);
+        return simple;
     }
 }

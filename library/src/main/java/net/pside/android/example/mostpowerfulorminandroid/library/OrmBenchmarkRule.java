@@ -22,6 +22,7 @@ public class OrmBenchmarkRule extends TestWatcher {
 
     private Context context;
     private String dbName;
+    private boolean skipMoveDbFile;
     private String className;
     private TimingLogger logger;
 
@@ -29,8 +30,17 @@ public class OrmBenchmarkRule extends TestWatcher {
             @NonNull Context context,
             @NonNull String dbName
     ) {
+        this(context, dbName, false);
+    }
+
+    public OrmBenchmarkRule(
+            @NonNull Context context,
+            @NonNull String dbName,
+            boolean skipMoveDbFile
+    ) {
         this.context = context;
         this.dbName = dbName;
+        this.skipMoveDbFile = skipMoveDbFile;
     }
 
     @Override
@@ -55,6 +65,11 @@ public class OrmBenchmarkRule extends TestWatcher {
     }
 
     private void renameDatabase() {
+        if (skipMoveDbFile) {
+            Log.w(className, "Database rename is skipped. Cleanup all entities manually.");
+            return;
+        }
+
         File databasePath = context.getDatabasePath(dbName);
         if (databasePath != null && databasePath.exists()) {
             File renameTo = new File(databasePath.getAbsolutePath() + "-" + new Date().getTime());
