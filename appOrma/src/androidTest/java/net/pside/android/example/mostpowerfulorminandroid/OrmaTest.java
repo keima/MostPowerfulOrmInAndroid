@@ -1,5 +1,7 @@
 package net.pside.android.example.mostpowerfulorminandroid;
 
+import androidx.test.InstrumentationRegistry;
+import androidx.test.runner.AndroidJUnit4;
 import com.github.gfx.android.orma.AccessThreadConstraint;
 import com.github.gfx.android.orma.Inserter;
 
@@ -11,9 +13,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
 
 import java.util.Date;
 import java.util.List;

@@ -30,14 +30,18 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
+    packagingOptions {
+        exclude 'META-INF/proguard/androidx-annotations.pro'
+    }
 }
 
 dependencies {
     implementation project(":library")
-    implementation "com.android.support:support-v4:${supportPackageVersion}"
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
 
     // input implementation , provided or annotationProcessor dependency here
     def ormaVersion = "6.0.2"
