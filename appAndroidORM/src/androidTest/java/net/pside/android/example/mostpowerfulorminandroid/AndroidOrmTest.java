@@ -30,7 +30,8 @@ public class AndroidOrmTest {
     @Rule
     public OrmBenchmarkRule rule = new OrmBenchmarkRule(
             InstrumentationRegistry.getTargetContext(),
-            DATABASE_NAME
+            DATABASE_NAME,
+            true
     );
 
     private Session session;
