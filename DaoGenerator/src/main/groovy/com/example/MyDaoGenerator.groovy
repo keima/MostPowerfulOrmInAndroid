@@ -20,7 +20,7 @@ public class MyDaoGenerator {
         simple.addStringProperty("stringValue");
         simple.addDateProperty("dateValue");
         simple.addBooleanProperty("booleanValue");
-        simple.addByteArrayProperty("blobValue");
+//        simple.addByteArrayProperty("blobValue");
         simple.addShortProperty("shortValue");
         simple.addIntProperty("intValue");
         simple.addLongProperty("longValue");
