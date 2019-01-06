@@ -28,7 +28,8 @@ public class SqliteMagicTest {
     @Rule
     public OrmBenchmarkRule rule = new OrmBenchmarkRule(
             InstrumentationRegistry.getTargetContext(),
-            DATABASE_NAME
+            DATABASE_NAME,
+            true
     );
 
     @After
