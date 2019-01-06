@@ -31,7 +31,8 @@ public class ObjectBoxTest {
     @Rule
     public OrmBenchmarkRule rule = new OrmBenchmarkRule(
             InstrumentationRegistry.getTargetContext(),
-            DATABASE_NAME
+            DATABASE_NAME,
+            true
     );
 
     private BoxStore boxStore;
